@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'org.greenrobot:greendao-generator:3.2.0'
+    compile group: 'org.freemarker', name: 'freemarker', version: '2.3.23'
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

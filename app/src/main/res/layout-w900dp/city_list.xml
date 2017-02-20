@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="horizontal"
+    android:showDividers="middle"
+    tools:context=".activity.CitiesActivity">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_to_refresh"
+        android:layout_width="@dimen/item_width"
+        android:layout_height="wrap_content">
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/city_list"
+        android:layout_width="@dimen/item_width"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".activity.CitiesActivity"
+        tools:listitem="@layout/city_list_content" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/dividerColor"
+        android:layout_toRightOf="@+id/swipe_to_refresh">
+
+    </View>
+
+    <FrameLayout
+        android:id="@+id/city_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/divider"
+        tools:ignore="InconsistentLayout" />
+
+    <FrameLayout
+        android:visibility="gone"
+        android:background="?android:colorBackground"
+        android:id="@+id/progressFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/divider"
+        tools:ignore="InconsistentLayout">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:background="?android:colorBackground"
+        android:id="@+id/selectCityFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/divider"
+        tools:ignore="InconsistentLayout">
+
+        <ImageView
+            android:layout_width="418dp"
+            android:layout_height="102dp"
+            android:id="@+id/imageView"
+            android:contentDescription="@string/image_description"
+            android:src="@drawable/cities"
+            android:layout_centerInParent="true"
+            tools:ignore="InconsistentLayout" />
+
+        <TextView
+            android:textColor="@color/secondaryTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/subtext_size"
+            android:text="@string/select_city"
+            android:id="@+id/textView"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/imageView"
+            tools:ignore="InconsistentLayout" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/date"
+        android:textColor="@color/secondaryTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginTop="@dimen/primary_text_top_padding"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="@dimen/subtext_size" />
+
+    <TextView
+        android:id="@+id/temperature"
+        android:textColor="@android:color/holo_green_dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginTop="@dimen/primary_text_top_padding"
+        android:layout_toRightOf="@+id/weather_state"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="32sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/temperature"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/wind"
+            android:textColor="@color/secondaryTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/subtext_size_bottom_padding"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/subtext_size" />
+
+        <TextView
+            android:id="@+id/humidity"
+            android:textColor="@color/secondaryTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/subtext_size_bottom_padding"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/subtext_size" />
+
+        <TextView
+            android:id="@+id/pressure"
+            android:textColor="@color/secondaryTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/subtext_size_bottom_padding"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/subtext_size" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/weather_state"
+        android:contentDescription="@string/image_description"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/date"
+        android:src="@drawable/morning_rain" />
+</RelativeLayout>

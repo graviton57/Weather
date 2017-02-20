@@ -1,0 +1,45 @@
+<resources xmlns:xliff="http://schemas.android.com/tools">
+    <string name="app_name">Weather</string>
+    <string name="action_settings">Settings</string>
+    <string name="could_not_find_a_city">Could not find a city. Try another name</string>
+    <string name="start_typing">Start typing the name of the city</string>
+    <string name="select_city">To view weather select a city</string>
+
+    <string name="format_wind" translatable="false">Wind:<xliff:g id="speed">1%.0f</xliff:g> km/h,<xliff:g id="dir">%2$s</xliff:g></string>
+    <string name="format_wind_hourly" translatable="false"><xliff:g id="speed">1%.0f</xliff:g> km/h,<xliff:g id="dir">%2$s</xliff:g></string>
+    <string name="temperature_plus">Temperature: +%.1f °C</string>
+    <string name="temperature_minus">Temperature: %.1f °C</string>
+    <string name="humidity">Humidity: %d%%</string>
+    <string name="humidity_hourly">%d%% humidity</string>
+    <string name="pressure">Pressure: %.0f Mb</string>
+    <string name="pressure_hourly">%.0f Mb</string>
+    <string name="temp_plus" translatable="false">+%.1f °C</string>
+    <string name="temp_minus" translatable="false">%.1f °C</string>
+
+    <string name="no_internet">No Internet connection available…</string>
+    <string name="image_description" translatable="false">Image</string>
+    <string name="error">Error</string>
+    <string name="failed_to_load_weather">Failed to load weather</string>
+    <string name="city_caption">City: </string>
+    <string name="country_caption">Country: </string>
+    <string name="image_view_content_description">Image</string>
+    <string name="action_search">Search</string>
+    <string name="about">About</string>
+    <string name="about_content" translatable="false">
+        <![CDATA[
+        API:
+        <br><a href="https://www.apixu.com/api.aspx">https://www.apixu.com/api</a>
+        <br><br>Images:
+        <br>Icon weather set made by apixu from <a href="https://www.apixu.com/api.aspx"</a>
+        <br><br>Libraries:
+        <br> <a href="https://square.github.io/retrofit/">retrofit2</a>
+        <br> <a href="https://github.com/square/okhttp">okhttp3</a>
+        <br> <a href="http://greenrobot.org/greendao/">greendao</a>
+        <br> <a href="http://square.github.io/picasso/">picasso</a>
+        <br> <a href="https://developer.android.com/topic/libraries/support-library/index.html">support</a>
+        <br> <a href="https://developer.android.com/training/testing/ui-testing/espresso-testing.html">espresso</a>
+        <br><br>Source code:
+        <br> <a href="https://github.com/graviton57/weather">https://github.com/graviton57/weather</a>
+        ]]>
+    </string>
+</resources>

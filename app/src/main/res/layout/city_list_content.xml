@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/app_bar_height"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="2dp"
+    android:layout_marginTop="2dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="6dp"
+    card_view:cardUseCompatPadding="true">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/state_image"
+            android:contentDescription="@string/image_description"
+            tools:src="@drawable/dn03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:scaleType="centerCrop" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mask"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="false">
+            <TextView
+                android:id="@+id/city_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentLeft="false"
+                tools:text="Chernivtsi"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/light"
+                android:textSize="@dimen/headline_text_size"
+                android:layout_marginLeft="@dimen/primary_text_margin"
+                android:layout_marginRight="@dimen/primary_text_margin"
+                android:layout_marginTop="@dimen/primary_text_top_padding"
+                android:layout_marginBottom="@dimen/subtext_size_bottom_padding"/>
+
+            <TextView
+                android:id="@+id/temperature"
+                tools:text="Temperature:-12.58 C"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/lightSecondary"
+                android:textSize="@dimen/subtext_size"
+                android:layout_marginLeft="@dimen/primary_text_margin"
+                android:layout_marginRight="@dimen/primary_text_margin"
+                android:layout_below="@+id/city_name" />
+
+            <TextView
+                android:id="@+id/wind"
+                tools:text="Wind:4.58 km/h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/lightSecondary"
+                android:textSize="@dimen/subtext_size"
+                android:layout_marginLeft="@dimen/primary_text_margin"
+                android:layout_marginRight="@dimen/primary_text_margin"
+                android:layout_below="@+id/temperature"
+                tools:ignore="InconsistentLayout" />
+
+            <TextView
+                android:id="@+id/humidity"
+                tools:text="Humidity:85.0%"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/lightSecondary"
+                android:textSize="@dimen/subtext_size"
+                android:layout_marginLeft="@dimen/primary_text_margin"
+                android:layout_marginRight="@dimen/primary_text_margin"
+                android:paddingBottom="@dimen/subtext_size_bottom_padding"
+                android:layout_below="@+id/wind"
+                tools:ignore="InconsistentLayout" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

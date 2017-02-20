@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clickable="true"
+    android:background="@drawable/selectable_item"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/state_image"
+        tools:src="@drawable/d01"
+        android:contentDescription="@string/image_description"
+        android:layout_width="@dimen/image_width"
+        android:layout_height="@dimen/image_height"
+        android:layout_alignParentLeft="false"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="@dimen/image_left_margin"
+        android:layout_marginRight="@dimen/image_right_margin" />
+
+    <TextView
+        android:id="@+id/city_name"
+        tools:text="Chernivtsi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_marginTop="@dimen/primary_text_top_padding"
+        android:layout_toRightOf="@+id/state_image"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="@dimen/primary_text_size" />
+
+    <TextView
+        android:id="@+id/temperature"
+        tools:text="Temperature:-12.58 C"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/city_name"
+        android:paddingBottom ="@dimen/primary_text_top_padding"
+        android:layout_marginLeft="@dimen/primary_text_margin"
+        android:layout_marginRight="@dimen/primary_text_margin"
+        android:layout_toRightOf="@+id/state_image"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="@dimen/subtext_size" />
+
+</RelativeLayout>
