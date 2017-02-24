@@ -56,6 +56,7 @@ public class CitiesActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private CitiesRecyclerViewAdapter mAdapter;
     private final static String FRAGMENT_TAG = "fragment_tag";
+    private SyncContentReceiver syncContentReceiver;
 
 
     @Override
@@ -64,7 +65,7 @@ public class CitiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cities);
         IntentFilter filter = new IntentFilter(SyncContentReceiver.SYNC_RESPONSE_STATUS);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
-        SyncContentReceiver syncContentReceiver = new SyncContentReceiver();
+        syncContentReceiver = new SyncContentReceiver();
         registerReceiver(syncContentReceiver, filter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -212,8 +213,8 @@ public class CitiesActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
+        unregisterReceiver(syncContentReceiver);
         super.onDestroy();
-
     }
 
     public class SyncContentReceiver extends BroadcastReceiver {
