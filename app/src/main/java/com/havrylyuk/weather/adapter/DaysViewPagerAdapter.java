@@ -48,7 +48,7 @@ public class DaysViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return mDays.size();
+        return mDays != null ? mDays.size() : 0;
     }
 
     public void clear() {

@@ -114,7 +114,6 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             holder.imageView.setTransitionName(holder.contentView.getClass().getName() + position);
         }
-
         if (holder.city.getWeather() != null) {
 
             Resources res = holder.view.getResources();
