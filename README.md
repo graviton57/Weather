@@ -26,7 +26,7 @@ Icon weather set made by apixu from https://www.apixu.com/api.aspx
 * com.squareup.retrofit2:retrofit:2.1.0
 * com.squareup.retrofit2:converter-gson:2.1.0
 * com.squareup.okhttp3:logging-interceptor:3.3.1
-* com.squareup.picasso:picasso:2.5.2
+* com.facebook.fresco:fresco:1.1.0
 
 Developed By
 -------
