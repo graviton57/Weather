@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.local.LocalDataSource;
 import com.squareup.picasso.Picasso;
@@ -26,13 +27,12 @@ public class WeatherApp extends Application {
         super.onCreate();
         //greenDAO
         localDataSource = LocalDataSource.getInstance(this);
-       /* PopulateDaoMaster.OpenHelper helper = new PopulateDaoMaster.OpenHelper(this, DB_NAME, null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        PopulateDaoMaster daoMaster = new PopulateDaoMaster(db);//populate city data
-        daoSession = daoMaster.newSession();*/
+
         //Picasso
         Picasso picasso = new Picasso.Builder(this).build();
         Picasso.setSingletonInstance(picasso);
+        Fresco.initialize(this);
+
 
         sSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
