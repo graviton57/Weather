@@ -14,8 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_WEATHER_URL = "http://api.apixu.com/v1/";
-    public static final String API_KEY = "f1f65c036eac482fbac161623171302";
     private static Retrofit sRetrofit = null;
 
     public ApiClient() {
@@ -29,7 +27,7 @@ public class ApiClient {
                     interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
                     OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
                     sRetrofit = new Retrofit.Builder()
-                            .baseUrl(BASE_WEATHER_URL)
+                            .baseUrl(BuildConfig.BASE_WEATHER_URL)
                             .addConverterFactory(GsonConverterFactory.create())
                             .client(client)
                             .build();

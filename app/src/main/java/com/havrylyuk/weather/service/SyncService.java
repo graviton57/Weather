@@ -25,7 +25,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,7 +65,6 @@ public class SyncService extends IntentService {
                 if (cities != null && !cities.isEmpty()) {
                     localDataSource.deleteAllForecast();//delete old forecast data
                     for (OrmCity city : cities) {
-                        if (BuildConfig.DEBUG) Log.d(LOG_TAG, "getWeatherForCity city= "+city.getCity_name());
                         getWeatherForCity(city);
                     }
                 } else  if (BuildConfig.DEBUG) Log.d(LOG_TAG, "empty cities table");
@@ -82,7 +80,7 @@ public class SyncService extends IntentService {
     private void getWeatherForCity(OrmCity city) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
         Call<ForecastWeather> responseCall =
-                service.getWeather(ApiClient.API_KEY, city.getCity_name(), String.valueOf(FORECAST_COUNT_DAYS));
+                service.getWeather(BuildConfig.API_KEY, city.getCity_name(), String.valueOf(FORECAST_COUNT_DAYS));
         try {
             ForecastWeather response = responseCall.execute().body();
             if (response.getError() == null) {

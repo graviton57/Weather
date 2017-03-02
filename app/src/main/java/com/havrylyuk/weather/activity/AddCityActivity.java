@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.adapter.AddCityRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
@@ -173,7 +174,7 @@ public class AddCityActivity extends AppCompatActivity {
     private void updateData() {
         if (!TextUtils.isEmpty(searchQuery)) {
             setProgressBarVisible(true);
-            Call<List<SearchResult>> responseCall = service.findCity(ApiClient.API_KEY, searchQuery);
+            Call<List<SearchResult>> responseCall = service.findCity(BuildConfig.API_KEY, searchQuery);
             responseCall.enqueue(new Callback<List<SearchResult>>() {
                 @Override
                 public void onResponse(Call<List<SearchResult>> call, Response<List<SearchResult>> response) {

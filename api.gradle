@@ -1,0 +1,5 @@
+ext {
+
+     BASE_WEATHER_URL = "http://api.apixu.com/v1/";
+     API_KEY = "f1f65c036eac482fbac161623171302";
+}
