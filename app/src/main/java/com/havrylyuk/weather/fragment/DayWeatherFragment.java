@@ -32,7 +32,6 @@ public class DayWeatherFragment extends Fragment  {
     public final static String DATE = "date";
     private HoursRecyclerViewAdapter mAdapter;
 
-
     public DayWeatherFragment() {
 
     }

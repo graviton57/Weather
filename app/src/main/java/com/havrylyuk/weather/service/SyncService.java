@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 
@@ -37,11 +38,14 @@ import retrofit2.Call;
 
 public class SyncService extends IntentService {
 
-    private static final String LOG_TAG = SyncService.class.getSimpleName();
+    public static final int FORECAST_COUNT_DAYS = 7;
     public static final String EXTRA_KEY_SYNC ="com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
+
+    private static final String LOG_TAG = SyncService.class.getSimpleName();
     private static final int START_SYNC = 1;
     private static final int END_SYNC = 2;
     private static final int ERROR_SYNC = 0;
+
 
     private ILocalDataSource localDataSource;
     private OpenWeatherService service;
@@ -76,8 +80,9 @@ public class SyncService extends IntentService {
     }
 
     private void getWeatherForCity(OrmCity city) {
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        Call<ForecastWeather> responseCall = service.getWeather(ApiClient.API_KEY, city.getCity_name(), "2");
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
+        Call<ForecastWeather> responseCall =
+                service.getWeather(ApiClient.API_KEY, city.getCity_name(), String.valueOf(FORECAST_COUNT_DAYS));
         try {
             ForecastWeather response = responseCall.execute().body();
             if (response.getError() == null) {

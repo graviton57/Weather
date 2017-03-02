@@ -20,7 +20,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <!--<ImageView
+            android:id="@+id/state_image"
+            android:contentDescription="@string/image_description"
+            tools:src="@drawable/dn03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:scaleType="centerCrop" />-->
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/state_image"
             android:contentDescription="@string/image_description"
             tools:src="@drawable/dn03"
@@ -28,7 +36,6 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

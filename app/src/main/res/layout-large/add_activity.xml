@@ -46,14 +46,13 @@
                 tools:listitem="@layout/item_add_city" />
         </android.support.v7.widget.CardView>
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/imageView"
             android:layout_width="418dp"
             android:layout_height="102dp"
             android:layout_centerInParent="true"
             android:contentDescription="@string/image_description"
             android:src="@drawable/cities" />
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"

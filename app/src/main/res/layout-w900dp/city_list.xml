@@ -68,7 +68,15 @@
         android:layout_toRightOf="@+id/divider"
         tools:ignore="InconsistentLayout">
 
-        <ImageView
+        <!--<ImageView
+            android:layout_width="418dp"
+            android:layout_height="102dp"
+            android:id="@+id/imageView"
+            android:contentDescription="@string/image_description"
+            android:src="@drawable/cities"
+            android:layout_centerInParent="true"
+            tools:ignore="InconsistentLayout" />-->
+        <com.facebook.drawee.view.SimpleDraweeView
             android:layout_width="418dp"
             android:layout_height="102dp"
             android:id="@+id/imageView"

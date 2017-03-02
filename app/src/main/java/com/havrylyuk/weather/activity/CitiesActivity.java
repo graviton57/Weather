@@ -108,13 +108,8 @@ public class CitiesActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        int spanCount;
         int orientation = getResources().getConfiguration().orientation;
-        if (!mTwoPane && Configuration.ORIENTATION_LANDSCAPE == orientation) {
-            spanCount = 2;
-        } else {
-            spanCount = 1;
-        }
+        int spanCount = !mTwoPane && Configuration.ORIENTATION_LANDSCAPE == orientation ? 2 : 1;
         GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
@@ -124,13 +119,11 @@ public class CitiesActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
                     @Override
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                                           RecyclerView.ViewHolder target) {
                         return false;
                     }
-
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                         int location = viewHolder.getAdapterPosition();
@@ -147,7 +140,6 @@ public class CitiesActivity extends AppCompatActivity {
                         }
                     }
                 };
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }

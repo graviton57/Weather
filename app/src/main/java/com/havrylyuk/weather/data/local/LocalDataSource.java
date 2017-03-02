@@ -2,7 +2,6 @@ package com.havrylyuk.weather.data.local;
 
 import android.content.Context;
 
-
 import com.havrylyuk.weather.dao.DaoMaster;
 import com.havrylyuk.weather.dao.DaoSession;
 import com.havrylyuk.weather.dao.OrmCity;
@@ -12,8 +11,6 @@ import com.havrylyuk.weather.dao.OrmWeatherDao;
 import com.havrylyuk.weather.util.Utility;
 
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +20,7 @@ import java.util.List;
  */
 public class LocalDataSource implements ILocalDataSource {
 
-    private static final String DB_NAME = "weather";
+    private static final String DB_NAME = "weather.db";
     private static ILocalDataSource INSTANCE;
     private DaoSession mDaoSession;
 

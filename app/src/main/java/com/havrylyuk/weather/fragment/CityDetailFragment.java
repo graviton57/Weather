@@ -1,7 +1,7 @@
 package com.havrylyuk.weather.fragment;
 
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,20 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.adapter.DaysViewPagerAdapter;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.local.LocalDataSource;
-import com.havrylyuk.weather.data.model.Condition;
-import com.havrylyuk.weather.data.model.Day;
 import com.havrylyuk.weather.data.model.DayPager;
-import com.havrylyuk.weather.data.model.ForecastDay;
-import com.havrylyuk.weather.data.model.Hour;
-import com.havrylyuk.weather.util.ImageHelper;
 import com.havrylyuk.weather.util.Utility;
 
 import java.text.SimpleDateFormat;
@@ -119,12 +114,12 @@ public class CityDetailFragment extends Fragment {
         }
         addDays(days);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.city_detail, container, false);
     }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -135,7 +130,6 @@ public class CityDetailFragment extends Fragment {
         viewPagerAdapter = new DaysViewPagerAdapter(fragmentManager, new ArrayList<DayPager>());
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -188,7 +182,6 @@ public class CityDetailFragment extends Fragment {
         super.onDestroy();
     }
 
-
     public void showProgressBar(boolean show) {
         if (progressFrame == null) {
             return;
@@ -211,7 +204,6 @@ public class CityDetailFragment extends Fragment {
         }
     }
 
-
     public void setHumidity(int humidity) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_humidity);
         if (view != null) {
@@ -220,7 +212,6 @@ public class CityDetailFragment extends Fragment {
             view.setText(humidityText);
         }
     }
-
 
     public void setWindSpeed(double windSpeed, String windDir) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_wind);
@@ -231,7 +222,6 @@ public class CityDetailFragment extends Fragment {
         }
     }
 
-
     public void setPressure(double pressure) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_pressure);
         if (view != null) {
@@ -241,42 +231,28 @@ public class CityDetailFragment extends Fragment {
         }
     }
 
-
     public void setDate(@NonNull Date date) {
         TextView view = (TextView) getActivity().findViewById(R.id.header_date);
         if (view != null) {
-            SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm", Locale.getDefault());
+            SimpleDateFormat format =
+                    new SimpleDateFormat("EE, dd MMM, HH:mm", Locale.getDefault());
             String value = format.format(date);
             view.setText(value);
         }
     }
 
-
-    public void setImage(@NonNull Drawable drawable) {
-        ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
-        if (view != null) {
-            view.setImageDrawable(drawable);
-        }
-    }
-
-
     public void setImage(@NonNull String fileName) {
-        ImageView imageView = (ImageView) getActivity().findViewById(R.id.backdrop);
+        SimpleDraweeView imageView =
+                (SimpleDraweeView) getActivity().findViewById(R.id.backdrop);
         if (imageView != null) {
-            ImageHelper.load("file:///android_asset/" + fileName, imageView);
+            imageView.setImageURI(Uri.parse("asset:///"+ fileName));
         }
     }
-
 
     public void addDays(List<DayPager> days) {
         if (viewPagerAdapter != null) {
             viewPagerAdapter.addDays(days);
         }
-    }
-
-
-    public void showNoForecast() {
-
     }
 
     public void showError() {
@@ -287,6 +263,4 @@ public class CityDetailFragment extends Fragment {
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
         }
     }
-
-
 }

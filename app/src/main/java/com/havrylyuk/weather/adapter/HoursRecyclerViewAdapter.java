@@ -6,11 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmWeather;
@@ -74,16 +73,13 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
         holder.pressure.setText(pressureText);
         ImageHelper.load("http:" + mHours.get(position).getIcon(), holder.weatherState);
         final String message = mHours.get(position).getCondition_text();
-
         holder.weatherState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,message,Toast.LENGTH_LONG).show();
             }
         });
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -97,7 +93,7 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
         public TextView wind;
         public TextView humidity;
         public TextView pressure;
-        public ImageView weatherState;
+        public SimpleDraweeView weatherState;
         public OrmCity city;
 
         public ViewHolder(View view) {
@@ -108,7 +104,7 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
             this.wind = (TextView) view.findViewById(R.id.wind);
             this.humidity = (TextView) view.findViewById(R.id.humidity);
             this.pressure = (TextView) view.findViewById(R.id.pressure);
-            this.weatherState = (ImageView) view.findViewById(R.id.weather_state);
+            this.weatherState = (SimpleDraweeView) view.findViewById(R.id.weather_state);
         }
     }
 }

@@ -3,11 +3,11 @@ package com.havrylyuk.weather.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,10 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.adapter.AddCityRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
@@ -50,7 +50,7 @@ public class AddCityActivity extends AppCompatActivity {
     private AddCityRecyclerViewAdapter mAdapter;
     private ProgressBar mProgressBar;
     private TextView mSearchState;
-    private ImageView mImageView;
+    private SimpleDraweeView mImageView;
     private View mCityListView;
 
     private MenuItem searchItem;
@@ -79,7 +79,7 @@ public class AddCityActivity extends AppCompatActivity {
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
         mSearchState = (TextView) findViewById(R.id.textView);
-        mImageView = (ImageView) findViewById(R.id.imageView);
+        mImageView = (SimpleDraweeView) findViewById(R.id.imageView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         assert mProgressBar != null;
         mProgressBar.setVisibility(View.GONE);

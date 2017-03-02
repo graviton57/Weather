@@ -33,7 +33,6 @@ public class SearchResult {
     @SerializedName("url")
     private String url;
 
-
     public SearchResult() {
     }
 

@@ -1,6 +1,7 @@
 package com.havrylyuk.weather.activity;
 
 import android.annotation.TargetApi;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -10,11 +11,10 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.transition.Transition;
-import android.widget.ImageView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
-import com.havrylyuk.weather.util.ImageHelper;
 
 /**
  *
@@ -48,10 +48,9 @@ public class CityDetailActivity extends AppCompatActivity {
         }
 
         String imageName = getIntent().getStringExtra(IMAGE_NAME);
-        ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+        SimpleDraweeView imageView = (SimpleDraweeView) findViewById(R.id.backdrop);
         if (imageView != null && !TextUtils.isEmpty(imageName)) {
-            String fileName = imageName + ".jpg";
-            ImageHelper.load("file:///android_asset/" + fileName, imageView);
+            imageView.setImageURI(Uri.parse("asset:///"+ imageName + ".jpg"));
         }
         boolean waitAnimations = false;
 
@@ -92,7 +91,6 @@ public class CityDetailActivity extends AppCompatActivity {
         onBackPressed();
         return false;
     }
-
 
     @TargetApi(21)
     private void initEnterAnimation() {

@@ -79,8 +79,7 @@
 
     </LinearLayout>
 
-
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/weather_state"
         android:contentDescription="@string/image_description"
         android:layout_width="56dp"

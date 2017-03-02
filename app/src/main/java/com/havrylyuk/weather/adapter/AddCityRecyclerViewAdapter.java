@@ -4,9 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.data.model.SearchResult;
 
@@ -75,13 +75,13 @@ public class AddCityRecyclerViewAdapter extends RecyclerView.Adapter<AddCityRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
         public TextView cityName;
-        public ImageView imageView;
+        public SimpleDraweeView imageView;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
             this.cityName = (TextView) view.findViewById(R.id.city_name);
-            this.imageView = (ImageView) view.findViewById(R.id.ic_city);
+            this.imageView = (SimpleDraweeView) view.findViewById(R.id.ic_city);
         }
     }
 
