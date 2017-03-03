@@ -11,15 +11,15 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/ic_city"
-        android:contentDescription="@string/image_view_content_description"
         android:layout_width="@dimen/image_width"
         android:layout_height="@dimen/image_width"
         android:layout_marginBottom="@dimen/image_left_margin"
         android:layout_marginLeft="@dimen/image_left_margin"
         android:layout_marginTop="@dimen/image_left_margin"
-        android:src="@drawable/city"
-        fresco:placeholderImage="@drawable/city"
-        />
+        android:contentDescription="@string/image_view_content_description"
+        fresco:actualImageScaleType="fitCenter"
+        fresco:placeholderImage="@drawable/ua"
+        tools:src="@drawable/ua" />
 
 <LinearLayout
     android:orientation="horizontal"

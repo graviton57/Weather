@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
@@ -87,6 +88,7 @@
         android:contentDescription="@string/image_description"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        fresco:actualImageScaleType="fitCenter"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/date"
         android:src="@drawable/morning_rain" />

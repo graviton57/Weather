@@ -30,12 +30,14 @@ import com.havrylyuk.weather.adapter.AddCityRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.local.LocalDataSource;
-import com.havrylyuk.weather.data.model.SearchResult;
-import com.havrylyuk.weather.data.remote.ApiClient;
-import com.havrylyuk.weather.data.remote.OpenWeatherService;
+import com.havrylyuk.weather.data.model.GeoCities;
+import com.havrylyuk.weather.data.model.GeoCity;
+import com.havrylyuk.weather.data.remote.GeoNameApiClient;
+import com.havrylyuk.weather.data.remote.GeoNamesService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,18 +50,20 @@ import retrofit2.Response;
 public class AddCityActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = AddCityActivity.class.getSimpleName();
+    private static final int MAX_CITIES_LIST_SIZE = 16;
+    private static final String CITIES_STYLE = "cities15000";
+
     private AddCityRecyclerViewAdapter mAdapter;
     private ProgressBar mProgressBar;
     private TextView mSearchState;
     private SimpleDraweeView mImageView;
     private View mCityListView;
 
-    private MenuItem searchItem;
     private SearchView searchView;
     private String searchQuery;
 
     private ILocalDataSource localDataSource;
-    private OpenWeatherService service;
+    private GeoNamesService service;
 
 
     @Override
@@ -74,8 +78,7 @@ public class AddCityActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
         localDataSource = LocalDataSource.getInstance(getApplicationContext());
-        service = ApiClient.getClient().create(OpenWeatherService.class);
-
+        service = GeoNameApiClient.getClient().create(GeoNamesService.class);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
@@ -95,12 +98,13 @@ public class AddCityActivity extends AppCompatActivity {
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
-        mAdapter = new AddCityRecyclerViewAdapter(new ArrayList<SearchResult>(),
+        mAdapter = new AddCityRecyclerViewAdapter(new ArrayList<GeoCity>(),
                         new AddCityRecyclerViewAdapter.AddCityRecyclerViewItemListener() {
             @Override
-            public void onItemClick(SearchResult newCity) {
-                OrmCity city = new OrmCity(newCity.getId(),newCity.getName(),newCity.getRegion(),
-                        newCity.getCountry(),newCity.getLat(),newCity.getLon());
+            public void onItemClick(GeoCity newCity) {
+                OrmCity city = new OrmCity(newCity.getGeoNameId(),newCity.getName(),newCity.getAdminName1(),
+                        newCity.getCountryName(), Double.parseDouble(newCity.getLat()),
+                        Double.parseDouble(newCity.getLng()));
                 localDataSource.saveCity(city);
                 Intent intent = new Intent(AddCityActivity.this, CitiesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -114,10 +118,13 @@ public class AddCityActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        searchItem = menu.findItem(R.id.action_search);
-        setupSearchView(searchItem);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        if (searchItem != null) {
+            setupSearchView(searchItem);
+        }
         return true;
     }
+
     private void setupSearchView(MenuItem searchItem) {
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
@@ -126,17 +133,13 @@ public class AddCityActivity extends AppCompatActivity {
                 updateData();
                 return true;
             }
-
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 return true;
             }
         });
-
         SearchManager searchManager = (SearchManager) (getSystemService(Context.SEARCH_SERVICE));
-        if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
-        }
+        searchView = (SearchView) searchItem.getActionView();
         if (searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -174,28 +177,28 @@ public class AddCityActivity extends AppCompatActivity {
     private void updateData() {
         if (!TextUtils.isEmpty(searchQuery)) {
             setProgressBarVisible(true);
-            Call<List<SearchResult>> responseCall = service.findCity(BuildConfig.API_KEY, searchQuery);
-            responseCall.enqueue(new Callback<List<SearchResult>>() {
+            Call<GeoCities> responseCall = service.findCity(
+                    searchQuery, MAX_CITIES_LIST_SIZE, Locale.getDefault().getLanguage(),
+                    CITIES_STYLE, BuildConfig.GEONAME_API_KEY);
+            responseCall.enqueue(new Callback<GeoCities>() {
                 @Override
-                public void onResponse(Call<List<SearchResult>> call, Response<List<SearchResult>> response) {
-                    Log.d(LOG_TAG,"Success onResponse list size="+response.body().size());
-                    if (!response.body().isEmpty()) {
-                        addCities(response.body());
+                public void onResponse(Call<GeoCities> call, Response<GeoCities> response) {
+                    Log.d(LOG_TAG,"Success onResponse list size="+response.body().getCities().size());
+                    if (!response.body().getCities().isEmpty()) {
+                        addCities(response.body().getCities());
                         setCityListVisible(true);
                         setProgressBarVisible(false);
                     } else {
                         showCouldNotFindCity();
                     }
                 }
-
                 @Override
-                public void onFailure(Call<List<SearchResult>> call, Throwable t) {
+                public void onFailure(Call<GeoCities> call, Throwable t) {
                     Log.e(LOG_TAG,"error:"+t.getMessage());
                     showCouldNotFindCity();
                     setProgressBarVisible(false);
                 }
             });
-
         } else {
             clear();
             setImageViewVisible(true);
@@ -205,8 +208,9 @@ public class AddCityActivity extends AppCompatActivity {
         }
     }
 
-    private void addCities(List<SearchResult> list) {
+    private void addCities(List<GeoCity> list) {
         if (mAdapter != null) {
+              mAdapter.clear();
               mAdapter.addCities(list);
         }
     }
@@ -263,7 +267,6 @@ public class AddCityActivity extends AppCompatActivity {
 
     }
 
-
     private void showCouldNotFindCity() {
         mSearchState.setText(getResources().getString(R.string.could_not_find_a_city));
     }
@@ -271,6 +274,4 @@ public class AddCityActivity extends AppCompatActivity {
     private void showStartTyping() {
         mSearchState.setText(getResources().getString(R.string.start_typing));
     }
-
-
 }

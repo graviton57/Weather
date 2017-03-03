@@ -6,6 +6,8 @@
 
 Weather Android App using apixu API https://www.apixu.com
 
+Cities list from http://www.geonames.org
+
 Icon weather set made by apixu from https://www.apixu.com/api.aspx
 
 

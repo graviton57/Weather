@@ -7,16 +7,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  *
  * Created by Igor Havrylyuk on 14.02.2017.
  */
 
-public class ApiClient {
+public class GeoNameApiClient {
 
     private static Retrofit sRetrofit = null;
 
-    public ApiClient() {
+    public GeoNameApiClient() {
     }
 
     public static Retrofit getClient() {
@@ -27,7 +28,7 @@ public class ApiClient {
                     interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
                     OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
                     sRetrofit = new Retrofit.Builder()
-                            .baseUrl(BuildConfig.BASE_WEATHER_URL)
+                            .baseUrl(BuildConfig.BASE_GEONAME_URL)
                             .addConverterFactory(GsonConverterFactory.create())
                             .client(client)
                             .build();

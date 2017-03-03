@@ -1,5 +1,6 @@
 package com.havrylyuk.weather.adapter;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
-import com.havrylyuk.weather.data.model.SearchResult;
+import com.havrylyuk.weather.data.model.GeoCity;
 
 import java.util.List;
 
@@ -20,23 +21,23 @@ import java.util.List;
 public class AddCityRecyclerViewAdapter extends RecyclerView.Adapter<AddCityRecyclerViewAdapter.ViewHolder>  {
 
     public interface AddCityRecyclerViewItemListener {
-        void onItemClick(SearchResult city);
+        void onItemClick(GeoCity city);
     }
 
-    private final List<SearchResult> cities;
+    private final List<GeoCity> cities;
     private AddCityRecyclerViewItemListener listener;
 
-    public AddCityRecyclerViewAdapter(List<SearchResult> cities , AddCityRecyclerViewItemListener listener) {
+    public AddCityRecyclerViewAdapter(List<GeoCity> cities , AddCityRecyclerViewItemListener listener) {
         this.cities = cities;
         this.listener = listener;
     }
 
-    public void addCity(SearchResult city) {
+    public void addCity(GeoCity city) {
         cities.add(cities.size(), city);
         notifyItemInserted(cities.size());
     }
 
-    public void addCities(List<SearchResult> cities) {
+    public void addCities(List<GeoCity> cities) {
         this.cities.addAll(this.cities.size(), cities);
         notifyDataSetChanged();
     }
@@ -63,8 +64,12 @@ public class AddCityRecyclerViewAdapter extends RecyclerView.Adapter<AddCityRecy
                 }
             }
         });
-        holder.cityName.setText(cities.get(position).getName());
-        holder.imageView.setImageResource(R.drawable.city);
+        String fullName = cities.get(position).getName()+", "+cities.get(position).getAdminName1()+
+                ", "+cities.get(position).getCountryName();
+        holder.cityName.setText(fullName);
+        String flagUrl = "http://www.geonames.org/flags/m/"+
+                cities.get(position).getCountryCode().toLowerCase()+".png";
+        holder.imageView.setImageURI(Uri.parse(flagUrl));
     }
 
     @Override

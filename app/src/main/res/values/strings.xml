@@ -5,8 +5,8 @@
     <string name="start_typing">Start typing the name of the city</string>
     <string name="select_city">To view weather select a city</string>
 
-    <string name="format_wind" translatable="false">Wind:<xliff:g id="speed">1%.0f</xliff:g> km/h,<xliff:g id="dir">%2$s</xliff:g></string>
-    <string name="format_wind_hourly" translatable="false"><xliff:g id="speed">1%.0f</xliff:g> km/h,<xliff:g id="dir">%2$s</xliff:g></string>
+    <string name="format_wind" translatable="false">Wind:<xliff:g id="speed">1%.0f</xliff:g> km/h, <xliff:g id="dir">%2$s</xliff:g></string>
+    <string name="format_wind_hourly" translatable="false"><xliff:g id="speed">1%.0f</xliff:g> km/h, <xliff:g id="dir">%2$s</xliff:g></string>
     <string name="temperature_plus">Temperature: +%.1f °C</string>
     <string name="temperature_minus">Temperature: %.1f °C</string>
     <string name="humidity">Humidity: %d%%</string>
@@ -29,13 +29,14 @@
         <![CDATA[
         API:
         <br><a href="https://www.apixu.com/api.aspx">https://www.apixu.com/api</a>
+        <br><a href="http://www.geonames.org">http://www.geonames.org/</a>
         <br><br>Images:
         <br>Icon weather set made by apixu from <a href="https://www.apixu.com/api.aspx"</a>
         <br><br>Libraries:
         <br> <a href="https://square.github.io/retrofit/">retrofit2</a>
         <br> <a href="https://github.com/square/okhttp">okhttp3</a>
         <br> <a href="http://greenrobot.org/greendao/">greendao</a>
-        <br> <a href="http://square.github.io/picasso/">picasso</a>
+        <br> <a href="https://github.com/facebook/fresco/">fresco</a>
         <br> <a href="https://developer.android.com/topic/libraries/support-library/index.html">support</a>
         <br> <a href="https://developer.android.com/training/testing/ui-testing/espresso-testing.html">espresso</a>
         <br><br>Source code:

@@ -13,7 +13,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,8 +35,7 @@ import com.havrylyuk.weather.data.model.CityWithWeather;
 
 import com.havrylyuk.weather.dialog.AboutDialog;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
-import com.havrylyuk.weather.service.SyncService;
-import com.havrylyuk.weather.util.Utility;
+import com.havrylyuk.weather.service.WeatherService;
 
 
 import java.util.ArrayList;
@@ -199,7 +197,7 @@ public class CitiesActivity extends AppCompatActivity {
 
     private void updateData() {
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
-           Intent intent = new Intent(this, SyncService.class);
+           Intent intent = new Intent(this, WeatherService.class);
            startService(intent);
     }
 
@@ -213,7 +211,7 @@ public class CitiesActivity extends AppCompatActivity {
         public static final String SYNC_RESPONSE_STATUS = "com.havrylyuk.weather.intent.action.SYNC_RESPONSE_STATUS";
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean sync = intent.getIntExtra(SyncService.EXTRA_KEY_SYNC, 0) == 1;
+            boolean sync = intent.getIntExtra(WeatherService.EXTRA_KEY_SYNC, 0) == 1;
             if (!sync) {
                 if (BuildConfig.DEBUG) Toast.makeText(CitiesActivity.this,"Sync complete",Toast.LENGTH_SHORT).show();
                 mSwipeRefreshLayout.setRefreshing(false);

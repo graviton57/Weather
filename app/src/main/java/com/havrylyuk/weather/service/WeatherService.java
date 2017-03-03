@@ -16,7 +16,7 @@ import com.havrylyuk.weather.data.model.Current;
 import com.havrylyuk.weather.data.model.ForecastDay;
 import com.havrylyuk.weather.data.model.ForecastWeather;
 import com.havrylyuk.weather.data.model.Hour;
-import com.havrylyuk.weather.data.remote.ApiClient;
+import com.havrylyuk.weather.data.remote.WeatherApiClient;
 import com.havrylyuk.weather.data.remote.OpenWeatherService;
 import com.havrylyuk.weather.util.Utility;
 
@@ -35,12 +35,12 @@ import retrofit2.Call;
  * Created by Igor Havrylyuk on 14.02.2017.
  */
 
-public class SyncService extends IntentService {
+public class WeatherService extends IntentService {
 
     public static final int FORECAST_COUNT_DAYS = 7;
     public static final String EXTRA_KEY_SYNC ="com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
 
-    private static final String LOG_TAG = SyncService.class.getSimpleName();
+    private static final String LOG_TAG = WeatherService.class.getSimpleName();
     private static final int START_SYNC = 1;
     private static final int END_SYNC = 2;
     private static final int ERROR_SYNC = 0;
@@ -49,8 +49,8 @@ public class SyncService extends IntentService {
     private ILocalDataSource localDataSource;
     private OpenWeatherService service;
 
-    public SyncService() {
-        super("SyncService");
+    public WeatherService() {
+        super("WeatherService");
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SyncService extends IntentService {
             sendSyncStatus(START_SYNC);
             if (Utility.isNetworkAvailable(getApplicationContext())) {
                 localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
-                service = ApiClient.getClient().create(OpenWeatherService.class);
+                service = WeatherApiClient.getClient().create(OpenWeatherService.class);
                 List<OrmCity> cities = localDataSource.getCityList();
                 if (cities != null && !cities.isEmpty()) {
                     localDataSource.deleteAllForecast();//delete old forecast data
@@ -70,7 +70,6 @@ public class SyncService extends IntentService {
                 } else  if (BuildConfig.DEBUG) Log.d(LOG_TAG, "empty cities table");
             } else    {
                 Log.d(LOG_TAG,getString(R.string.no_internet));
-                //Toast.makeText(this, getString(R.string.no_internet),Toast.LENGTH_LONG).show();
             }
             if (BuildConfig.DEBUG) Log.d(LOG_TAG, " End network data synchronization ");
             sendSyncStatus(END_SYNC);
@@ -79,8 +78,9 @@ public class SyncService extends IntentService {
 
     private void getWeatherForCity(OrmCity city) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
+        String latLng = String.valueOf(city.getLat()) + " , " + String.valueOf(city.getLon());
         Call<ForecastWeather> responseCall =
-                service.getWeather(BuildConfig.API_KEY, city.getCity_name(), String.valueOf(FORECAST_COUNT_DAYS));
+                service.getWeather(BuildConfig.WEATHER_API_KEY, latLng, String.valueOf(FORECAST_COUNT_DAYS));
         try {
             ForecastWeather response = responseCall.execute().body();
             if (response.getError() == null) {
@@ -99,7 +99,6 @@ public class SyncService extends IntentService {
                 weather.setCondition_text(current.getCondition().getText());
                 weather.setCondition_code(current.getCondition().getCode());
                 weather.setWind_speed(current.getWindKph());
-                Log.d(LOG_TAG,"wind_dir="+response.getCurrent().getWindDir());
                 weather.setWind_dir(response.getCurrent().getWindDir());
                 ormWeatherList.add(weather);
 
@@ -119,7 +118,6 @@ public class SyncService extends IntentService {
                             weather.setIcon(hour.getCondition().getIcon());
                             weather.setWind_speed(hour.getWindKph());
                             weather.setWind_dir(hour.getWindDir());
-                            Log.d(LOG_TAG,"wind_dir="+hour.getWindDir());
                             weather.setRain(hour.getWillItRain());
                             weather.setSnow(hour.getWillItSnow());
                             weather.setCondition_text(hour.getCondition().getText());
@@ -150,7 +148,6 @@ public class SyncService extends IntentService {
 
     }
 
-    // send sync status
     private void sendSyncStatus(int status) {
         Intent intentUpdate = new Intent();
         intentUpdate.setAction(CitiesActivity.SyncContentReceiver.SYNC_RESPONSE_STATUS);

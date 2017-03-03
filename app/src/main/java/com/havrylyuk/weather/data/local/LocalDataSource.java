@@ -100,7 +100,7 @@ public class LocalDataSource implements ILocalDataSource {
             cities.add(new OrmCity((long)1, "Chernivtsi", "Chernivetska Oblast", "Ukraine", 48.3, 25.93));
             cities.add(new OrmCity((long)2, "Kiev", "Kievska Oblast", "Ukraine", 50.43, 30.52));
             cities.add(new OrmCity((long)3, "Lviv", "L'vivs'ka Oblast'", "Ukraine", 49.83, 24.0));
-            cities.add(new OrmCity((long)4, "London", "City of London, Greater London", "United Kingdom", 51.52, -0.11));
+            cities.add(new OrmCity((long)4, "London", "GeoCity of London, Greater London", "United Kingdom", 51.52, -0.11));
             cities.add(new OrmCity((long)5, "Madrid", "Madrid", "Spain", 40.4, -3.68));
             saveCities(cities);
             return cities;

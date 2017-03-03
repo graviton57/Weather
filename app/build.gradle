@@ -11,7 +11,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BASE_WEATHER_URL", "\"$BASE_WEATHER_URL\""
-        buildConfigField "String", "API_KEY", "\"$API_KEY\""
+        buildConfigField "String", "BASE_GEONAME_URL", "\"$BASE_GEONAME_URL\""
+        buildConfigField "String", "GEONAME_API_KEY", "\"$GEONAME_API_KEY\""
+        buildConfigField "String", "WEATHER_API_KEY", "\"$WEATHER_API_KEY\""
     }
 
     buildTypes {
