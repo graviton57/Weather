@@ -112,7 +112,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
             Resources res = holder.view.getResources();
             String temperatureText = holder.city.getWeather().getTemp() > 0 ?
                     res.getString(R.string.temperature_plus, holder.city.getWeather().getTemp()) :
-                    res.getString(R.string.temperature_minus,holder.city.getWeather().getTemp());
+                    res.getString(R.string.temperature_minus, holder.city.getWeather().getTemp());
             holder.temperatureView.setText(temperatureText);
             if (holder.windView != null) {
                     String windText = res.getString(R.string.format_wind,

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -20,6 +21,14 @@ import java.util.List;
  */
 
 public class Utility {
+
+
+    public static boolean isMetricUnit() {
+        String countryCode = Locale.getDefault().getCountry();
+        // USA, Liberia, Burma - Imperial , all others countries - metric
+        return !("US".equals(countryCode) || "LR".equals(countryCode) || "MM".equals(countryCode));
+    }
+
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager

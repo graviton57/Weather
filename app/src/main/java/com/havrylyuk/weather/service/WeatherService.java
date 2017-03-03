@@ -37,7 +37,7 @@ import retrofit2.Call;
 
 public class WeatherService extends IntentService {
 
-    public static final int FORECAST_COUNT_DAYS = 2;
+    public static final int FORECAST_COUNT_DAYS = 3;
     public static final String EXTRA_KEY_SYNC ="com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
 
     private static final String LOG_TAG = WeatherService.class.getSimpleName();
@@ -48,9 +48,13 @@ public class WeatherService extends IntentService {
 
     private ILocalDataSource localDataSource;
     private OpenWeatherService service;
+    private final SimpleDateFormat fmt;
+    private final boolean isMetric;
 
     public WeatherService() {
         super("WeatherService");
+        fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
+        isMetric = Utility.isMetricUnit();
     }
 
     @Override
@@ -77,7 +81,6 @@ public class WeatherService extends IntentService {
     }
 
     private void getWeatherForCity(OrmCity city) {
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
         String latLng = String.valueOf(city.getLat()) + " , " + String.valueOf(city.getLon());
         Call<ForecastWeather> responseCall =
                 service.getWeather(BuildConfig.WEATHER_API_KEY, latLng, String.valueOf(FORECAST_COUNT_DAYS));
@@ -85,48 +88,8 @@ public class WeatherService extends IntentService {
             ForecastWeather response = responseCall.execute().body();
             if (response.getError() == null) {
                 List<OrmWeather> ormWeatherList = new ArrayList<>();
-                Current current = response.getCurrent();
-                OrmWeather weather = new OrmWeather();
-                weather.setCity_id(city.get_id());
-                weather.setCity_name(response.getLocation().getName());
-                weather.setDt(fmt.parse(current.getLastUpdated()));
-                weather.setClouds(current.getCloud());
-                weather.setHumidity(current.getHumidity());
-                weather.setPressure(current.getPressureMb() * 0.750062 );//convert to mmHg.
-                weather.setTemp(current.getTempC());
-                weather.setIs_day(current.getIs_day()==1);
-                weather.setIcon(current.getCondition().getIcon());
-                weather.setCondition_text(current.getCondition().getText());
-                weather.setCondition_code(current.getCondition().getCode());
-                weather.setWind_speed(current.getWindKph()* 0.277778);//convert to m/s
-                weather.setWind_dir(response.getCurrent().getWindDir());
-                ormWeatherList.add(weather);
-
-                for (ForecastDay forecastDay : response.getForecast().getForecastday()) {
-                    for (Hour hour : forecastDay.getHours()) {
-                        if (fmt.parse(hour.getTime()).after(Calendar.getInstance().getTime())) {//no save old forecast
-                            weather = new OrmWeather();
-                            weather.setCity_id(city.get_id());
-                            weather.setCity_name(response.getLocation().getName());
-                            weather.setDt(fmt.parse(hour.getTime()));
-                            weather.setClouds(hour.getCloud());
-                            weather.setHumidity(hour.getHumidity());
-                            weather.setPressure(hour.getPressureMb() * 0.750062);
-                            weather.setTemp(hour.getTempC());
-                            weather.setTemp_min(forecastDay.getDay().getMintempC());
-                            weather.setTemp_max(forecastDay.getDay().getMaxtempC());
-                            weather.setIcon(hour.getCondition().getIcon());
-                            weather.setWind_speed(hour.getWindKph()* 0.277778);
-                            weather.setWind_dir(hour.getWindDir());
-                            weather.setRain(hour.getWillItRain());
-                            weather.setSnow(hour.getWillItSnow());
-                            weather.setCondition_text(hour.getCondition().getText());
-                            weather.setCondition_code(hour.getCondition().getCode());
-                            weather.setIs_day(hour.getIs_day()==1);
-                            ormWeatherList.add(weather);
-                        }
-                    }
-                }
+                ormWeatherList.add(getCurrentOrmWeather(city.get_id(),response));
+                getHourlyOrmWeather(city.get_id(), response, ormWeatherList);
                 localDataSource.saveForecast(ormWeatherList);
                 if (BuildConfig.DEBUG) {
                     Log.d(LOG_TAG,"location cityName="+response.getLocation().getName()
@@ -142,10 +105,62 @@ public class WeatherService extends IntentService {
             } catch (IOException e) {
                 e.printStackTrace();
                 sendSyncStatus(ERROR_SYNC);
-            } catch (ParseException e) {
-                e.printStackTrace();
-        }
+            }
+    }
 
+    private OrmWeather getCurrentOrmWeather(long cityId, ForecastWeather response ) {
+        Current current = response.getCurrent();
+        OrmWeather weather = new OrmWeather();
+        weather.setCity_id(cityId);
+        weather.setCity_name(response.getLocation().getName());
+        try {
+            weather.setDt(fmt.parse(current.getLastUpdated()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        weather.setClouds(current.getCloud());
+        weather.setHumidity(current.getHumidity());
+        weather.setPressure(isMetric ? current.getPressureMb() * 0.750062 : current.getPressureIn());//convert to mmHg.
+        weather.setTemp(isMetric?current.getTempC():current.getTempF());
+        weather.setIs_day(current.getIs_day()==1);
+        weather.setIcon(current.getCondition().getIcon());
+        weather.setCondition_text(current.getCondition().getText());
+        weather.setCondition_code(current.getCondition().getCode());
+        weather.setWind_speed(isMetric ? current.getWindKph() * 0.277778 : current.getWindMph());//convert to m/s
+        weather.setWind_dir(response.getCurrent().getWindDir());
+        return weather;
+    }
+
+    private void getHourlyOrmWeather(long cityId, ForecastWeather response, List<OrmWeather> ormWeatherList) {
+        for (ForecastDay forecastDay : response.getForecast().getForecastday()) {
+            for (Hour hour : forecastDay.getHours()) {
+                try {
+                    if (fmt.parse(hour.getTime()).after(Calendar.getInstance().getTime())) {//no save old forecast
+                        OrmWeather weather = new OrmWeather();
+                        weather.setCity_id(cityId);
+                        weather.setCity_name(response.getLocation().getName());
+                        weather.setDt(fmt.parse(hour.getTime()));
+                        weather.setClouds(hour.getCloud());
+                        weather.setHumidity(hour.getHumidity());
+                        weather.setPressure(isMetric ? hour.getPressureMb() * 0.750062 : hour.getPressureIn());
+                        weather.setTemp(isMetric ? hour.getTempC() : hour.getTempF());
+                        weather.setTemp_min(isMetric ?forecastDay.getDay().getMintempC():forecastDay.getDay().getMintempF());
+                        weather.setTemp_max(isMetric ?forecastDay.getDay().getMaxtempC():forecastDay.getDay().getMaxtempF());
+                        weather.setIcon(hour.getCondition().getIcon());
+                        weather.setWind_speed(isMetric ? hour.getWindKph() * 0.277778 : hour.getWindMph());
+                        weather.setWind_dir(hour.getWindDir());
+                        weather.setRain(hour.getWillItRain());
+                        weather.setSnow(hour.getWillItSnow());
+                        weather.setCondition_text(hour.getCondition().getText());
+                        weather.setCondition_code(hour.getCondition().getCode());
+                        weather.setIs_day(hour.getIs_day()==1);
+                        ormWeatherList.add(weather);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void sendSyncStatus(int status) {
