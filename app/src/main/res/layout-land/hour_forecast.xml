@@ -36,7 +36,7 @@
         android:layout_marginTop="@dimen/primary_text_top_padding"
         android:layout_toRightOf="@+id/weather_state"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="32sp" />
+        android:textSize="28sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
 
         <TextView
             android:id="@+id/wind"
-            tools:text="4.58 m/s,Nw"
+            tools:text="4.58 m/s, Nw"
             android:textColor="@color/colorSecondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
