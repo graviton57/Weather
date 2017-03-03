@@ -44,7 +44,7 @@
         android:layout_marginTop="@dimen/primary_text_top_padding"
         android:layout_toRightOf="@+id/state_image"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/primary_text_size" />
 
     <TextView
@@ -58,7 +58,7 @@
         android:layout_marginRight="@dimen/primary_text_margin"
         android:layout_toRightOf="@+id/state_image"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/secondaryTextColor"
+        android:textColor="@color/colorSecondaryText"
         android:textSize="@dimen/subtext_size" />
 
 </RelativeLayout>

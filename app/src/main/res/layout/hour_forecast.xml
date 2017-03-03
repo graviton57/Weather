@@ -59,7 +59,7 @@
         <TextView
             android:id="@+id/wind"
             tools:text="4.58 m/s,Nw"
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/colorSecondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
@@ -72,7 +72,7 @@
         <TextView
             android:id="@+id/humidity"
             tools:text="85% humidity"
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/colorSecondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
@@ -84,7 +84,7 @@
         <TextView
             android:id="@+id/pressure"
             tools:text="743 mmHg."
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/colorSecondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/subtext_size_bottom_padding"

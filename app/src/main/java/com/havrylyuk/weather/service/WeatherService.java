@@ -37,7 +37,7 @@ import retrofit2.Call;
 
 public class WeatherService extends IntentService {
 
-    public static final int FORECAST_COUNT_DAYS = 7;
+    public static final int FORECAST_COUNT_DAYS = 2;
     public static final String EXTRA_KEY_SYNC ="com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
 
     private static final String LOG_TAG = WeatherService.class.getSimpleName();

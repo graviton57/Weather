@@ -32,7 +32,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/light"
+    android:background="@color/colorLight"
     android:layout_below="@+id/dialog_title">
     <TextView
         android:layout_width="match_parent"
@@ -59,7 +59,7 @@
             android:layout_width="0dp"
             android:text="Ok"
             android:textAllCaps="false"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="@color/colorPrimaryText"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>

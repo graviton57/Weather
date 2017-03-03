@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/date"
-        android:textColor="@color/secondaryTextColor"
+        android:textColor="@color/colorSecondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"
@@ -45,7 +45,7 @@
 
         <TextView
             android:id="@+id/wind"
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/colorSecondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/humidity"
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/colorSecondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -65,7 +65,7 @@
 
         <TextView
             android:id="@+id/pressure"
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/colorSecondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/subtext_size_bottom_padding"

@@ -31,7 +31,7 @@
         android:id="@+id/divider"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/dividerColor"
+        android:background="@color/colorDivider"
         android:layout_toRightOf="@+id/swipe_to_refresh">
 
     </View>
@@ -86,7 +86,7 @@
             tools:ignore="InconsistentLayout" />
 
         <TextView
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/colorSecondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/subtext_size"

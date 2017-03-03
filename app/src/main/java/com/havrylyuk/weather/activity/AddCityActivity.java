@@ -269,6 +269,7 @@ public class AddCityActivity extends AppCompatActivity {
 
     private void showCouldNotFindCity() {
         mSearchState.setText(getResources().getString(R.string.could_not_find_a_city));
+        clear();
     }
 
     private void showStartTyping() {

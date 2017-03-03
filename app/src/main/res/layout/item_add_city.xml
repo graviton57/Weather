@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
         android:text="@string/city_caption"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/primary_text_size" />
 
     <TextView
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/text_margin"
         tools:text="Chernivtsi"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/primary_text_size" />
 
 </LinearLayout>
