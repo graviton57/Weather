@@ -92,13 +92,13 @@ public class WeatherService extends IntentService {
                 weather.setDt(fmt.parse(current.getLastUpdated()));
                 weather.setClouds(current.getCloud());
                 weather.setHumidity(current.getHumidity());
-                weather.setPressure(current.getPressureIn());
+                weather.setPressure(current.getPressureMb() * 0.750062 );//convert to mmHg.
                 weather.setTemp(current.getTempC());
                 weather.setIs_day(current.getIs_day()==1);
                 weather.setIcon(current.getCondition().getIcon());
                 weather.setCondition_text(current.getCondition().getText());
                 weather.setCondition_code(current.getCondition().getCode());
-                weather.setWind_speed(current.getWindKph());
+                weather.setWind_speed(current.getWindKph()* 0.277778);//convert to m/s
                 weather.setWind_dir(response.getCurrent().getWindDir());
                 ormWeatherList.add(weather);
 
@@ -111,12 +111,12 @@ public class WeatherService extends IntentService {
                             weather.setDt(fmt.parse(hour.getTime()));
                             weather.setClouds(hour.getCloud());
                             weather.setHumidity(hour.getHumidity());
-                            weather.setPressure(hour.getPressureMb());
+                            weather.setPressure(hour.getPressureMb() * 0.750062);
                             weather.setTemp(hour.getTempC());
                             weather.setTemp_min(forecastDay.getDay().getMintempC());
                             weather.setTemp_max(forecastDay.getDay().getMaxtempC());
                             weather.setIcon(hour.getCondition().getIcon());
-                            weather.setWind_speed(hour.getWindKph());
+                            weather.setWind_speed(hour.getWindKph()* 0.277778);
                             weather.setWind_dir(hour.getWindDir());
                             weather.setRain(hour.getWillItRain());
                             weather.setSnow(hour.getWillItSnow());

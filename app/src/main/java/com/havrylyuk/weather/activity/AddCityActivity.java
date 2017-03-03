@@ -183,7 +183,6 @@ public class AddCityActivity extends AppCompatActivity {
             responseCall.enqueue(new Callback<GeoCities>() {
                 @Override
                 public void onResponse(Call<GeoCities> call, Response<GeoCities> response) {
-                    Log.d(LOG_TAG,"Success onResponse list size="+response.body().getCities().size());
                     if (!response.body().getCities().isEmpty()) {
                         addCities(response.body().getCities());
                         setCityListVisible(true);
@@ -243,7 +242,6 @@ public class AddCityActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.GONE);
         }
     }
-
 
     private void setImageViewVisible(boolean visible) {
         if (mImageView != null) {

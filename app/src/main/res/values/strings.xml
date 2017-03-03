@@ -5,14 +5,14 @@
     <string name="start_typing">Start typing the name of the city</string>
     <string name="select_city">To view weather select a city</string>
 
-    <string name="format_wind" translatable="false">Wind:<xliff:g id="speed">1%.0f</xliff:g> km/h, <xliff:g id="dir">%2$s</xliff:g></string>
-    <string name="format_wind_hourly" translatable="false"><xliff:g id="speed">1%.0f</xliff:g> km/h, <xliff:g id="dir">%2$s</xliff:g></string>
+    <string name="format_wind" translatable="false">Wind:<xliff:g id="speed">1%.0f</xliff:g> m/s, <xliff:g id="dir">%2$s</xliff:g></string>
+    <string name="format_wind_hourly" translatable="false"><xliff:g id="speed">1%.0f</xliff:g> m/s, <xliff:g id="dir">%2$s</xliff:g></string>
     <string name="temperature_plus">Temperature: +%.1f °C</string>
     <string name="temperature_minus">Temperature: %.1f °C</string>
     <string name="humidity">Humidity: %d%%</string>
     <string name="humidity_hourly">%d%% humidity</string>
-    <string name="pressure">Pressure: %.0f Mb</string>
-    <string name="pressure_hourly">%.0f Mb</string>
+    <string name="pressure">Pressure: %.0f mmHg.</string>
+    <string name="pressure_hourly">%.0f mmHg.</string>
     <string name="temp_plus" translatable="false">+%.1f °C</string>
     <string name="temp_minus" translatable="false">%.1f °C</string>
 
