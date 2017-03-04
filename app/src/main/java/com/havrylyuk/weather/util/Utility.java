@@ -8,6 +8,7 @@ import android.util.Log;
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.dao.OrmWeather;
+import com.havrylyuk.weather.widget.TodayWidgetIntentService;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -128,5 +129,14 @@ public class Utility {
                 return isDay?"18d.jpg":"18n.jpg";
             default:return "unknnown.png";
         }
+    }
+
+    public static String formatTemperature(Context context, double temperature) {
+        String suffix = "\u00B0";
+        if (!isMetricUnit()) {
+            temperature = (temperature * 1.8) + 32;
+        }
+        // For presentation, assume the user doesn't care about tenths of a degree.
+        return String.format(context.getString(R.string.format_temperature), temperature);
     }
 }

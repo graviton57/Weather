@@ -9,7 +9,9 @@
     <color name="colorLightPrimary"  >#cfd8dc</color>
     <color name="colorPrimaryText"   >#212121</color>
     <color name="colorSecondaryText" >#727272</color>
+    <color name="colorForecastLow"   >#607D8B</color>
     <color name="colorDivider"       >#b6b6b6</color>
+    <color name="colorActivated"     >#E0E0E0</color>
     <color name="colorLight"         >#ffffff</color>
     <color name="colorLightSecondary">#bfffffff</color>
     <color name="colorMask"          >#99212121</color>

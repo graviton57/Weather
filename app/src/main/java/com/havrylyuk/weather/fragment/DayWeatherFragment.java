@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.adapter.HoursRecyclerViewAdapter;
@@ -59,6 +60,12 @@ public class DayWeatherFragment extends Fragment  {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         mAdapter = new HoursRecyclerViewAdapter(getActivity(),new ArrayList<OrmWeather>());
+        mAdapter.setListener(new HoursRecyclerViewAdapter.OnIconClickListener() {
+            @Override
+            public void onIconClick(OrmWeather weather, View view) {
+                Toast.makeText(getActivity(),weather.getCondition_text(),Toast.LENGTH_LONG).show();
+            }
+        });
         recyclerView.setAdapter(mAdapter);
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
@@ -72,7 +79,6 @@ public class DayWeatherFragment extends Fragment  {
     public void addWeatherToList(OrmWeather weather) {
         mAdapter.addElement(weather);
     }
-
 
 
 }

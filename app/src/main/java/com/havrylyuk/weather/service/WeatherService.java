@@ -1,6 +1,7 @@
 package com.havrylyuk.weather.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
@@ -38,12 +39,16 @@ import retrofit2.Call;
 public class WeatherService extends IntentService {
 
     public static final int FORECAST_COUNT_DAYS = 3;
-    public static final String EXTRA_KEY_SYNC ="com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
+    public static final String EXTRA_KEY_SYNC =
+            "com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
+    public static final String ACTION_DATA_UPDATED =
+            "com.havrylyuk.weather.app.ACTION_DATA_UPDATED";
 
     private static final String LOG_TAG = WeatherService.class.getSimpleName();
     private static final int START_SYNC = 1;
     private static final int END_SYNC = 2;
     private static final int ERROR_SYNC = 0;
+
 
 
     private ILocalDataSource localDataSource;
@@ -71,6 +76,7 @@ public class WeatherService extends IntentService {
                     for (OrmCity city : cities) {
                         getWeatherForCity(city);
                     }
+                    updateWidgets();
                 } else  if (BuildConfig.DEBUG) Log.d(LOG_TAG, "empty cities table");
             } else    {
                 Log.d(LOG_TAG,getString(R.string.no_internet));
@@ -171,5 +177,10 @@ public class WeatherService extends IntentService {
         sendBroadcast(intentUpdate);
     }
 
-
+    private void updateWidgets() {
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(getPackageName());
+        sendBroadcast(dataUpdatedIntent);
+    }
 }

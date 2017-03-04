@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorForecastLow"
+    android:alpha="0.9"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp">
+
+    <ImageView
+        android:id="@+id/widget_button_update"
+        android:layout_width="32dp"
+        android:layout_gravity="end|bottom"
+        android:layout_height="32dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/refresh" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/widget_icon"
+            android:layout_gravity="center"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_clear" />
+
+        <TextView
+            android:id="@+id/widget_high_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-light"
+            android:paddingStart="8dp"
+            android:textColor="@color/colorLight"
+            android:textSize="36dp"
+            tools:ignore="RtlSymmetry"
+            tools:text="7°C"
+            android:paddingLeft="8dp" />
+
+        <LinearLayout
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/widget_city_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/colorLight"
+                tools:ignore="RelativeOverlap"
+                tools:text="Chernivtsi" />
+            <TextView
+                android:id="@+id/widget_weather_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/colorLight"
+                tools:ignore="RelativeOverlap"
+                tools:text="Нд,05 Бер,12:34" />
+            <TextView
+                android:id="@+id/widget_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center_horizontal"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/colorLight"
+                tools:text="Clear " />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</FrameLayout>

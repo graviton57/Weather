@@ -43,4 +43,10 @@
         <br> <a href="https://github.com/graviton57/weather">https://github.com/graviton57/weather</a>
         ]]>
     </string>
+    <!-- Strings related to Widgets -->
+    <string name="title_widget_today">Weather Today</string>
+    <!-- Strings for formatting weather-related data -->
+    <!-- Temperature format [CHAR LIMIT=5 -->
+    <!--<string name="format_temperature"><xliff:g id="temp">%1.0f °C</xliff:g>\u00B0</string>-->
+    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g> °C</string>
 </resources>

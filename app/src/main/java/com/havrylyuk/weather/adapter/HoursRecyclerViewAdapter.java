@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
@@ -25,6 +24,11 @@ import java.util.Locale;
  */
 public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecyclerViewAdapter.ViewHolder> {
 
+    public interface OnIconClickListener{
+        void onIconClick(OrmWeather weather, View view);
+    }
+
+    private  OnIconClickListener listener;
     private final List<OrmWeather> mHours;
     private SimpleDateFormat mFormatTime = new SimpleDateFormat("HH:mm", Locale.getDefault());
     private Context context;
@@ -47,6 +51,10 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
     public void clear() {
         mHours.clear();
         notifyDataSetChanged();
+    }
+
+    public void setListener(OnIconClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -76,7 +84,9 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
         holder.weatherState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,message,Toast.LENGTH_LONG).show();
+                if (listener != null) {
+                    listener.onIconClick(mHours.get(holder.getAdapterPosition()),v);
+                }
             }
         });
     }
