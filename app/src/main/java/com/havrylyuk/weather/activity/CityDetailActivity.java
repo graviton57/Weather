@@ -36,7 +36,6 @@ public class CityDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-
         String cityName = getIntent().getStringExtra(CityDetailFragment.ARG_ITEM_NAME);
         if (cityName != null) {
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
@@ -46,14 +45,12 @@ public class CityDetailActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(cityName);
             }
         }
-
         String imageName = getIntent().getStringExtra(IMAGE_NAME);
         SimpleDraweeView imageView = (SimpleDraweeView) findViewById(R.id.backdrop);
         if (imageView != null && !TextUtils.isEmpty(imageName)) {
             imageView.setImageURI(Uri.parse("asset:///"+ imageName + ".jpg"));
         }
         boolean waitAnimations = false;
-
         if (getResources().getConfiguration().orientation == OrientationHelper.VERTICAL &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String transitionName = getIntent().getStringExtra(TRANSITION_NAME);
@@ -63,7 +60,6 @@ public class CityDetailActivity extends AppCompatActivity {
                 imageView.setTransitionName(transitionName);
             }
         }
-
         if (savedInstanceState == null) {
             long cityId = getIntent().getLongExtra(CityDetailFragment.ARG_ITEM_ID, 0);
             CityDetailFragment fragment = CityDetailFragment.getInstance(cityId, cityName);

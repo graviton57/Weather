@@ -26,7 +26,7 @@ public interface ILocalDataSource {
 
     void deleteAllForecast();
 
-    void deleteForecast(int cityId);
+    void deleteForecast(long cityId);
 
     void deleteCity(OrmCity city);
 

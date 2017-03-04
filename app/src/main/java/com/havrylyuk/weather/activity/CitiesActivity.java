@@ -55,23 +55,23 @@ public class CitiesActivity extends AppCompatActivity {
     private CitiesRecyclerViewAdapter mAdapter;
     private final static String FRAGMENT_TAG = "fragment_tag";
     private SyncContentReceiver syncContentReceiver;
+    private ILocalDataSource localDataSource;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
+        localDataSource = LocalDataSource.getInstance(this);
         IntentFilter filter = new IntentFilter(SyncContentReceiver.SYNC_RESPONSE_STATUS);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         syncContentReceiver = new SyncContentReceiver();
         registerReceiver(syncContentReceiver, filter);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
@@ -82,11 +82,9 @@ public class CitiesActivity extends AppCompatActivity {
                 }
             });
         }
-
         if (findViewById(R.id.city_detail_container) != null) {
             mTwoPane = true;
         }
-
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
@@ -125,6 +123,8 @@ public class CitiesActivity extends AppCompatActivity {
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                         int location = viewHolder.getAdapterPosition();
+                        localDataSource.deleteForecast(mAdapter.getCity(location).get_id());
+                        localDataSource.deleteCity(mAdapter.getCity(location));
                         mAdapter.removeCity(location);
                         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
                         if (mAdapter.getCurrentPosition() == location && mTwoPane && fragment != null) {

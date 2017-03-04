@@ -163,7 +163,7 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
-    public void deleteForecast(int cityId) {
+    public void deleteForecast(long cityId) {
         OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
         weatherDao.queryBuilder()
                 .where(OrmWeatherDao.Properties.City_id.eq(cityId))
