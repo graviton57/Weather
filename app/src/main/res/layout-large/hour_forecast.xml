@@ -23,14 +23,14 @@
 
     <TextView
         android:id="@+id/temperature"
-        android:textColor="@android:color/holo_green_dark"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
         android:layout_marginLeft="@dimen/primary_text_margin"
         android:layout_marginRight="@dimen/primary_text_margin"
-        android:layout_marginTop="@dimen/primary_text_top_padding"
+        android:layout_marginTop="@dimen/subtext_size_bottom_padding"
         android:layout_toRightOf="@+id/weather_state"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="20sp" />

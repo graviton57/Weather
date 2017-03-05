@@ -62,7 +62,6 @@ public class CityDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         localDataSource = LocalDataSource.getInstance(getContext());
         if (savedInstanceState != null) {
             long cityId = getArguments().getLong(ARG_ITEM_ID);

@@ -13,7 +13,7 @@
 
     <dimen name="headline_text_size">24sp</dimen>
     <dimen name="primary_text_size">16sp</dimen>
-    <dimen name="primary_text_top_padding">20dp</dimen>
+    <dimen name="primary_text_top_padding">16dp</dimen>
     <dimen name="primary_text_margin">16dp</dimen>
     <dimen name="title_margin">42dp</dimen>
     <dimen name="subtext_size">14sp</dimen>
