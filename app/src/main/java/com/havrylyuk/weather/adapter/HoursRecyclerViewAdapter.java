@@ -13,6 +13,7 @@ import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.util.ImageHelper;
+import com.havrylyuk.weather.util.PreferencesHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -32,10 +33,14 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
     private final List<OrmWeather> mHours;
     private SimpleDateFormat mFormatTime = new SimpleDateFormat("HH:mm", Locale.getDefault());
     private Context context;
+    private boolean isMetric;
 
     public HoursRecyclerViewAdapter(Context context, List<OrmWeather> hours) {
         mHours = hours;
         this.context= context;
+        PreferencesHelper pref =  PreferencesHelper.getInstance();
+        isMetric = context.getString(R.string.pref_unit_default_value)
+                .equals(pref.getUnits(context.getString(R.string.pref_unit_key)));
     }
 
     public void addElement(OrmWeather Weather) {
@@ -69,15 +74,21 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
         Resources res = holder.view.getResources();
         holder.time.setText(mFormatTime.format(mHours.get(position).getDt()));
         String temperatureText = mHours.get(position).getTemp() > 0 ?
-                res.getString(R.string.temp_plus, mHours.get(position).getTemp()) :
-                res.getString(R.string.temp_minus, mHours.get(position).getTemp());
+                res.getString(R.string.format_temp_plus, mHours.get(position).getTemp(),
+                        isMetric ? "°C" : "°F") :
+                res.getString(R.string.format_temp_minus, mHours.get(position).getTemp(),
+                        isMetric ? "°C" : "°F");
         holder.temperature.setText(temperatureText);
-        String windText = res.getString(R.string.format_wind_hourly, mHours.get(position).getWind_speed(),
+        String windText = res.getString(R.string.format_wind_hourly,
+                mHours.get(position).getWind_speed(),
+                isMetric?"m/s":"mph",
                 mHours.get(position).getWind_dir());
         holder.wind.setText(windText);
-        String humidityText = res.getString(R.string.humidity_hourly, mHours.get(position).getHumidity());
+        String humidityText = res.getString(R.string.format_humidity_hourly, mHours.get(position).getHumidity());
         holder.humidity.setText(humidityText);
-        String pressureText = res.getString(R.string.pressure_hourly, mHours.get(position).getPressure());
+        String pressureText = res.getString(R.string.format_pressure_hourly,
+                mHours.get(position).getPressure(),
+                isMetric ? "mmHg." : "psi");
         holder.pressure.setText(pressureText);
         ImageHelper.load("http:" + mHours.get(position).getIcon(), holder.weatherState);
         final String message = mHours.get(position).getCondition_text();

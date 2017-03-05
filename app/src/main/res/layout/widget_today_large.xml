@@ -71,7 +71,7 @@
                 android:id="@+id/widget_wind"
                 tools:text="Wind 12 m/s, NW"
                 android:textColor="@color/colorLight"
-                android:fontFamily="sans-serif-light"
+                android:textAppearance="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/widget_icon"

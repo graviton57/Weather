@@ -64,7 +64,6 @@ public class CitiesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cities);
         localDataSource = LocalDataSource.getInstance(this);
         IntentFilter filter = new IntentFilter(WeatherService.ACTION_DATA_UPDATED);
-        //filter.addCategory(Intent.CATEGORY_DEFAULT);
         syncContentReceiver = new SyncContentReceiver();
         registerReceiver(syncContentReceiver, filter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,25 +84,27 @@ public class CitiesActivity extends AppCompatActivity {
         if (findViewById(R.id.city_detail_container) != null) {
             mTwoPane = true;
         }
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_list);
-        assert recyclerView != null;
-        setupRecyclerView(recyclerView);
+        setupRecyclerView();
+        setupSwipeRefreshLayout();
+        loadData();
+    }
+
+    private void setupSwipeRefreshLayout(){
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               updateData();
+                updateData();
             }
         });
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-        updateData();
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_list);
         int orientation = getResources().getConfiguration().orientation;
         int spanCount = !mTwoPane && Configuration.ORIENTATION_LANDSCAPE == orientation ? 2 : 1;
         GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
@@ -198,6 +199,18 @@ public class CitiesActivity extends AppCompatActivity {
         }
     }
 
+    private void loadData(){
+        List<CityWithWeather> cityWithWeatherList = new ArrayList<>();
+        for (OrmCity ormCity : localDataSource.getCityList()) {
+            CityWithWeather cityWithWeather = new CityWithWeather();
+            cityWithWeather.setCity(ormCity);
+            cityWithWeather.setWeather(localDataSource.getSingleForecast(ormCity.get_id()));
+            cityWithWeatherList.add(cityWithWeather);
+        }
+        if (mAdapter!=null) {
+            mAdapter.setCities(cityWithWeatherList);
+        }
+    }
     private void updateData() {
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
            Intent intent = new Intent(this, WeatherService.class);
@@ -218,16 +231,7 @@ public class CitiesActivity extends AppCompatActivity {
             if (!sync) {
                 if (BuildConfig.DEBUG) Toast.makeText(CitiesActivity.this,"Sync complete",Toast.LENGTH_SHORT).show();
                 mSwipeRefreshLayout.setRefreshing(false);
-                ILocalDataSource localDataSource = LocalDataSource.getInstance(context);
-                List<CityWithWeather> cityWithWeatherList = new ArrayList<>();
-                for (OrmCity ormCity : localDataSource.getCityList()) {
-                    CityWithWeather cityWithWeather = new CityWithWeather();
-                    cityWithWeather.setCity(ormCity);
-                    cityWithWeather.setWeather(localDataSource.getSingleForecast(ormCity.get_id()));
-                    cityWithWeatherList.add(cityWithWeather);
-                }
-                mAdapter.setCities(cityWithWeatherList);
-
+                loadData();
             }
         }
     }

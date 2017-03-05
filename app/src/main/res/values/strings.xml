@@ -5,16 +5,16 @@
     <string name="start_typing">Start typing the name of the city</string>
     <string name="select_city">To view weather select a city</string>
 
-    <string name="format_wind" translatable="false">Wind:<xliff:g id="speed">1%.0f</xliff:g> m/s, <xliff:g id="dir">%2$s</xliff:g></string>
-    <string name="format_wind_hourly" translatable="false"><xliff:g id="speed">1%.0f</xliff:g> m/s, <xliff:g id="dir">%2$s</xliff:g></string>
-    <string name="temperature_plus">Temperature: +%.1f °C</string>
-    <string name="temperature_minus">Temperature: %.1f °C</string>
-    <string name="humidity">Humidity: %d%%</string>
-    <string name="humidity_hourly">%d%% humidity</string>
-    <string name="pressure">Pressure: %.0f mmHg.</string>
-    <string name="pressure_hourly">%.0f mmHg.</string>
-    <string name="temp_plus" translatable="false">+%.1f °C</string>
-    <string name="temp_minus" translatable="false">%.1f °C</string>
+    <string name="format_wind" translatable="false">Wind:<xliff:g id="speed">1%.0f</xliff:g> <xliff:g id="unit">%2$s</xliff:g>, <xliff:g id="dir">%3$s</xliff:g></string>
+    <string name="format_wind_hourly" translatable="false"><xliff:g id="speed">1%.0f</xliff:g> <xliff:g id="unit">%2$s</xliff:g>, <xliff:g id="dir">%3$s</xliff:g></string>
+    <string name="temperature_plus">Temperature: +%.1f <xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="temperature_minus">Temperature: %.1f <xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="format_humidity">Humidity: %d%%</string>
+    <string name="format_humidity_hourly">%d%% humidity</string>
+    <string name="format_pressure">Pressure: %.0f <xliff:g id="pressure">%2$s</xliff:g></string>
+    <string name="format_pressure_hourly">%.0f <xliff:g id="pressure">%2$s</xliff:g></string>
+    <string name="format_temp_plus" translatable="false">+%.1f <xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="format_temp_minus" translatable="false">%.1f <xliff:g id="unit">%2$s</xliff:g></string>
 
     <string name="no_internet">No Internet connection available…</string>
     <string name="image_description" translatable="false">Image</string>
@@ -48,7 +48,7 @@
     <!-- Strings for formatting weather-related data -->
     <!-- Temperature format [CHAR LIMIT=5 -->
     <!--<string name="format_temperature"><xliff:g id="temp">%1.0f °C</xliff:g>\u00B0</string>-->
-    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g> °C</string>
+    <string name="format_widget_temperature"><xliff:g id="temp">%1.0f</xliff:g><xliff:g id="unit">%2$s</xliff:g></string>
     <!-- Strings strings -->
     <string name="pref_header_general">General</string>
     <string name="pref_enable_location_key" translatable="false">pref_enable_lacation_key</string>

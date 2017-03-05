@@ -14,7 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.model.CityWithWeather;
-import com.havrylyuk.weather.util.ImageHelper;
+import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
 import java.util.List;
@@ -26,18 +26,24 @@ import java.util.List;
 
 public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecyclerViewAdapter.ViewHolder> {
 
+
+
     public interface CitiesRecyclerViewItemListener {
         void onItemClick(CityWithWeather city, View view);
     }
 
-    private Context mContext;
+    private Context context;
     private List<CityWithWeather> mCities;
     private CitiesRecyclerViewItemListener mListener;
     private int mCurrentPosition = -1;
+    private  boolean isMetric;
 
     public CitiesRecyclerViewAdapter(Context context, List<CityWithWeather> cities) {
         mCities = cities;
-        mContext = context;
+        this.context = context;
+        PreferencesHelper pref =  PreferencesHelper.getInstance();
+        isMetric = context.getString(R.string.pref_unit_default_value)
+                .equals(pref.getUnits(context.getString(R.string.pref_unit_key)));
     }
 
     public void setListener(CitiesRecyclerViewItemListener listener) {
@@ -111,17 +117,19 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         if (holder.city.getWeather() != null) {
             Resources res = holder.view.getResources();
             String temperatureText = holder.city.getWeather().getTemp() > 0 ?
-                    res.getString(R.string.temperature_plus, holder.city.getWeather().getTemp()) :
-                    res.getString(R.string.temperature_minus, holder.city.getWeather().getTemp());
+                    res.getString(R.string.temperature_plus, holder.city.getWeather().getTemp(),isMetric ? "°C" : "°F") :
+                    res.getString(R.string.temperature_minus, holder.city.getWeather().getTemp(),isMetric ? "°C" : "°F");
             holder.temperatureView.setText(temperatureText);
             if (holder.windView != null) {
                     String windText = res.getString(R.string.format_wind,
-                            holder.city.getWeather().getWind_speed(),holder.city.getWeather().getWind_dir());
+                            holder.city.getWeather().getWind_speed(),
+                            isMetric?"m/s":"mph",
+                            holder.city.getWeather().getWind_dir());
                     holder.windView.setText(windText);
 
             }
             if (holder.humidity != null) {
-                String holderText = res.getString(R.string.humidity,
+                String holderText = res.getString(R.string.format_humidity,
                         holder.city.getWeather().getHumidity());
                 holder.humidity.setText(holderText);
             }

@@ -23,6 +23,7 @@ import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.local.LocalDataSource;
 import com.havrylyuk.weather.data.model.DayPager;
+import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
 import java.text.SimpleDateFormat;
@@ -45,6 +46,8 @@ public class CityDetailFragment extends Fragment {
     private TabLayout tabLayout;
     private boolean waitAnimations;
     private ILocalDataSource localDataSource;
+    private boolean isMetric;
+    private PreferencesHelper pref;
 
     public CityDetailFragment() {
 
@@ -62,6 +65,7 @@ public class CityDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pref = PreferencesHelper.getInstance();
         localDataSource = LocalDataSource.getInstance(getContext());
         if (savedInstanceState != null) {
             long cityId = getArguments().getLong(ARG_ITEM_ID);
@@ -123,6 +127,8 @@ public class CityDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        isMetric = getString(R.string.pref_unit_default_value)
+                .equals(pref.getUnits(getString(R.string.pref_unit_key)));
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         FragmentManager fragmentManager = getChildFragmentManager();
@@ -197,8 +203,8 @@ public class CityDetailFragment extends Fragment {
         if (view != null) {
             Resources res = getResources();
             String temperatureText = temperature > 0 ?
-                    res.getString(R.string.temp_plus, temperature) :
-                    res.getString(R.string.temp_minus, temperature);
+                    res.getString(R.string.format_temp_plus, temperature, isMetric ? "°C" : "°F") :
+                    res.getString(R.string.format_temp_minus, temperature, isMetric ? "°C" : "°F");
             view.setText(temperatureText);
         }
     }
@@ -207,7 +213,7 @@ public class CityDetailFragment extends Fragment {
         TextView view = (TextView) getActivity().findViewById(R.id.header_humidity);
         if (view != null) {
             Resources res = getResources();
-            String humidityText = res.getString(R.string.humidity, humidity);
+            String humidityText = res.getString(R.string.format_humidity, humidity);
             view.setText(humidityText);
         }
     }
@@ -216,7 +222,8 @@ public class CityDetailFragment extends Fragment {
         TextView view = (TextView) getActivity().findViewById(R.id.header_wind);
         if (view != null) {
             Resources res = getResources();
-            String windText = res.getString(R.string.format_wind, windSpeed, windDir);
+            String windText = res.getString(R.string.format_wind,
+                     windSpeed, isMetric?"m/s":"mph", windDir);
             view.setText(windText);
         }
     }
@@ -225,7 +232,7 @@ public class CityDetailFragment extends Fragment {
         TextView view = (TextView) getActivity().findViewById(R.id.header_pressure);
         if (view != null) {
             Resources res = getResources();
-            String pressureText = res.getString(R.string.pressure, pressure);
+            String pressureText = res.getString(R.string.format_pressure, pressure, isMetric ? "mmHg." : "psi");
             view.setText(pressureText);
         }
     }

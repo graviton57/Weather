@@ -65,7 +65,8 @@ public class WeatherService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null ) {
             PreferencesHelper pref = PreferencesHelper.getInstance();
-            isMetric = "metric".equals(pref.getUnits(getString(R.string.pref_unit_key)));
+            isMetric = getString(R.string.pref_unit_default_value)
+                    .equals(pref.getUnits(getString(R.string.pref_unit_key)));
             if (BuildConfig.DEBUG) Log.d(LOG_TAG, " Beginning network data synchronization ");
             updateSyncStatus(START_SYNC);
             if (Utility.isNetworkAvailable(getApplicationContext())) {

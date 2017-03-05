@@ -59,7 +59,7 @@ public class DayWeatherFragment extends Fragment  {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        mAdapter = new HoursRecyclerViewAdapter(getActivity(),new ArrayList<OrmWeather>());
+        mAdapter = new HoursRecyclerViewAdapter(getActivity(), new ArrayList<OrmWeather>());
         mAdapter.setListener(new HoursRecyclerViewAdapter.OnIconClickListener() {
             @Override
             public void onIconClick(OrmWeather weather, View view) {

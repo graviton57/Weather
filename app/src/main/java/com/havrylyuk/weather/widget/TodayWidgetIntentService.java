@@ -32,6 +32,7 @@ import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.local.LocalDataSource;
 import com.havrylyuk.weather.service.WeatherService;
+import com.havrylyuk.weather.util.PreferencesHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -54,6 +55,9 @@ public class TodayWidgetIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm", Locale.getDefault());
+        PreferencesHelper pref = PreferencesHelper.getInstance();
+        boolean isMetric = getString(R.string.pref_unit_default_value)
+                .equals(pref.getUnits(getString(R.string.pref_unit_key)));
         if (intent != null  ) {
             boolean sync = intent.getIntExtra(WeatherService.EXTRA_KEY_SYNC, 0) == 1;
             Log.d(LOG_TAG,"onHandleIntent action update show progress sync="+sync);
@@ -74,9 +78,10 @@ public class TodayWidgetIntentService extends IntentService {
                 if (ormWeather != null) {
                      description = ormWeather.getCondition_text();
                      date = format.format(ormWeather.getDt());
-                     wind = getString(R.string.format_wind, ormWeather.getWind_speed(), ormWeather.getWind_dir());
+                     wind = getString(R.string.format_wind, ormWeather.getWind_speed(),
+                             isMetric?"m/s":"mph", ormWeather.getWind_dir());
                      weatherIcon = "http:" + ormWeather.getIcon();
-                    formatTemp = getString(R.string.format_temperature, ormWeather.getTemp());
+                    formatTemp = getString(R.string.format_widget_temperature, ormWeather.getTemp(),isMetric?"°C":"°F");
                 } else Log.d(LOG_TAG,"ormWeather = Null!");
               }  else Log.d(LOG_TAG,"ormCity = Null!");
             for (int appWidgetId : appWidgetIds) {
