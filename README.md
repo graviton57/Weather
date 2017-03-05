@@ -10,15 +10,16 @@ List of cities and flags from http://www.geonames.org
 
 Icon weather set made by apixu from https://www.apixu.com/api.aspx
 
+Main Activity|Detail Activity | Detail list
+-------------|----------------- | -------------
+![alt text](screenshot/main.png "Main Activity")  | ![alt text](screenshot/detail.png "Detail Fragment") | ![alt text](screenshot/list.png "Hourly list")
 
-#### Main
-![alt text](screenshot/main.png "Main Fragment")
-#### Detail Activity
-![alt text](screenshot/detail.png "Detail Fragment")
-#### Detail list
-![alt text](screenshot/list.png "Hourly list")
-#### Search City
-![alt text](screenshot/add_city.png "Add new city")
+
+Search City|Settings Activity | Widget
+-------------|----------------- | -------------
+![alt text](screenshot/add_city.png "Add new city")  | ![alt text](screenshot/settings.png "Settings Fragment") | ![alt text](screenshot/widget.png "Widget")
+
+
 
 #### Used libraries:
 * com.android.support:appcompat-v7:25.1.0
