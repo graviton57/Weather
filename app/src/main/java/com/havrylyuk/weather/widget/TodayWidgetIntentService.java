@@ -64,7 +64,8 @@ public class TodayWidgetIntentService extends IntentService {
             OrmCity ormCity = localDataSource.getCityList().get(0);
             String cityName = null;
             String description = null;
-            String date=null;
+            String date = null;
+            String wind = null;
             String weatherIcon = null;
             String formatTemp = null;
             if (ormCity != null) {
@@ -73,6 +74,7 @@ public class TodayWidgetIntentService extends IntentService {
                 if (ormWeather != null) {
                      description = ormWeather.getCondition_text();
                      date = format.format(ormWeather.getDt());
+                     wind = getString(R.string.format_wind, ormWeather.getWind_speed(), ormWeather.getWind_dir());
                      weatherIcon = "http:" + ormWeather.getIcon();
                     formatTemp = getString(R.string.format_temperature, ormWeather.getTemp());
                 } else Log.d(LOG_TAG,"ormWeather = Null!");
@@ -85,6 +87,7 @@ public class TodayWidgetIntentService extends IntentService {
                     views.setViewVisibility(R.id.widget_button_update, sync ? View.GONE : View.VISIBLE);
                     views.setViewVisibility(R.id.widget_progress_bar, sync ? View.VISIBLE : View.GONE);
                     setRemoteContentDescription(views, description);
+                    if (wind!=null) views.setTextViewText(R.id.widget_wind, wind);
                     if (description!=null) views.setTextViewText(R.id.widget_description, description);
                     if (cityName!=null) views.setTextViewText(R.id.widget_city_name, cityName);
                     if (date!=null) views.setTextViewText(R.id.widget_weather_date, date);
