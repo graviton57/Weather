@@ -1,0 +1,22 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="@string/pref_general_key"
+        android:title="@string/pref_header_general">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/pref_enable_location_key"
+            android:summary="@string/pref_enable_location_summary"
+            android:title="@string/pref_enable_location_title" />
+
+        <ListPreference
+            android:defaultValue="@string/pref_unit_default_value"
+            android:entries="@array/arr_units_names"
+            android:entryValues="@array/arr_units_values"
+            android:key="@string/pref_unit_key"
+            android:title="@string/pref_unit_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,7 +1,6 @@
 package com.havrylyuk.weather.service;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,7 +8,6 @@ import android.widget.Toast;
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.WeatherApp;
-import com.havrylyuk.weather.activity.CitiesActivity;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
@@ -19,6 +17,7 @@ import com.havrylyuk.weather.data.model.ForecastWeather;
 import com.havrylyuk.weather.data.model.Hour;
 import com.havrylyuk.weather.data.remote.WeatherApiClient;
 import com.havrylyuk.weather.data.remote.OpenWeatherService;
+import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ import retrofit2.Call;
 
 public class WeatherService extends IntentService {
 
-    public static final int FORECAST_COUNT_DAYS = 3;
+    public static final int FORECAST_COUNT_DAYS = 7;
     public static final String EXTRA_KEY_SYNC =
             "com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
     public static final String ACTION_DATA_UPDATED =
@@ -54,19 +53,21 @@ public class WeatherService extends IntentService {
     private ILocalDataSource localDataSource;
     private OpenWeatherService service;
     private final SimpleDateFormat fmt;
-    private final boolean isMetric;
+    private boolean isMetric;
 
     public WeatherService() {
         super("WeatherService");
         fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
-        isMetric = Utility.isMetricUnit();
+
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null ) {
+            PreferencesHelper pref = PreferencesHelper.getInstance();
+            isMetric = "metric".equals(pref.getUnits(getString(R.string.pref_unit_key)));
             if (BuildConfig.DEBUG) Log.d(LOG_TAG, " Beginning network data synchronization ");
-            sendSyncStatus(START_SYNC);
+            updateSyncStatus(START_SYNC);
             if (Utility.isNetworkAvailable(getApplicationContext())) {
                 localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
                 service = WeatherApiClient.getClient().create(OpenWeatherService.class);
@@ -76,13 +77,13 @@ public class WeatherService extends IntentService {
                     for (OrmCity city : cities) {
                         getWeatherForCity(city);
                     }
-                    updateWidgets();
+
                 } else  if (BuildConfig.DEBUG) Log.d(LOG_TAG, "empty cities table");
             } else    {
                 Log.d(LOG_TAG,getString(R.string.no_internet));
             }
             if (BuildConfig.DEBUG) Log.d(LOG_TAG, " End network data synchronization ");
-            sendSyncStatus(END_SYNC);
+            updateSyncStatus(END_SYNC);
         }
     }
 
@@ -97,12 +98,6 @@ public class WeatherService extends IntentService {
                 ormWeatherList.add(getCurrentOrmWeather(city.get_id(),response));
                 getHourlyOrmWeather(city.get_id(), response, ormWeatherList);
                 localDataSource.saveForecast(ormWeatherList);
-                if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG,"location cityName="+response.getLocation().getName()
-                            +"Current t=" + response.getCurrent().getFeelslikeC()
-                            + "Current date=" + response.getCurrent().getLastUpdated()
-                            +"Current icon=" + response.getCurrent().getCondition().getIcon());
-                }
             } else {
                 Log.e(LOG_TAG, response.getError().getMessage());
                 Toast.makeText(getApplicationContext(), response.getError().getCode()+
@@ -110,7 +105,7 @@ public class WeatherService extends IntentService {
              }
             } catch (IOException e) {
                 e.printStackTrace();
-                sendSyncStatus(ERROR_SYNC);
+                updateSyncStatus(ERROR_SYNC);
             }
     }
 
@@ -169,18 +164,13 @@ public class WeatherService extends IntentService {
         }
     }
 
-    private void sendSyncStatus(int status) {
+    private void updateSyncStatus(int status) {
         Intent intentUpdate = new Intent();
-        intentUpdate.setAction(CitiesActivity.SyncContentReceiver.SYNC_RESPONSE_STATUS);
-        intentUpdate.addCategory(Intent.CATEGORY_DEFAULT);
+        intentUpdate.setAction(ACTION_DATA_UPDATED);
+       // intentUpdate.addCategory(Intent.CATEGORY_DEFAULT);
+        intentUpdate.setPackage(getPackageName());
         intentUpdate.putExtra(EXTRA_KEY_SYNC, status);
         sendBroadcast(intentUpdate);
     }
 
-    private void updateWidgets() {
-        // Setting the package ensures that only components in our app will receive the broadcast
-        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
-                .setPackage(getPackageName());
-        sendBroadcast(dataUpdatedIntent);
-    }
 }

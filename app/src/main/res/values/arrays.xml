@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="arr_units_names">
+        <item>@string/pref_item_unit_metric</item>
+        <item>@string/pref_item_unit_imperial</item>
+    </string-array>
+
+    <string name="pref_item_unit_imperial">Imperial</string>
+    <string name="pref_item_unit_metric">Metric</string>
+
+    <string-array  name="arr_units_values">
+        <item>metric</item>
+        <item>imperial</item>
+    </string-array>
+
+    <string name="pref_unit_default_value" translatable="true">metric</string>
+
+</resources>

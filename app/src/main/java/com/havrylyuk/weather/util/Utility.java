@@ -8,7 +8,6 @@ import android.util.Log;
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.dao.OrmWeather;
-import com.havrylyuk.weather.widget.TodayWidgetIntentService;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -24,10 +23,13 @@ import java.util.Locale;
 public class Utility {
 
 
-    public static boolean isMetricUnit() {
+    public static String getDefaultUnit() {
         String countryCode = Locale.getDefault().getCountry();
         // USA, Liberia, Burma - Imperial , all others countries - metric
-        return !("US".equals(countryCode) || "LR".equals(countryCode) || "MM".equals(countryCode));
+        if ("US".equals(countryCode) || "LR".equals(countryCode) || "MM".equals(countryCode)){
+            return "imperial";
+        }
+        return "metric";
     }
 
 
@@ -131,12 +133,4 @@ public class Utility {
         }
     }
 
-    public static String formatTemperature(Context context, double temperature) {
-        String suffix = "\u00B0";
-        if (!isMetricUnit()) {
-            temperature = (temperature * 1.8) + 32;
-        }
-        // For presentation, assume the user doesn't care about tenths of a degree.
-        return String.format(context.getString(R.string.format_temperature), temperature);
-    }
 }

@@ -2,6 +2,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/app_bar_height"
@@ -20,18 +21,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--<ImageView
-            android:id="@+id/state_image"
-            android:contentDescription="@string/image_description"
-            tools:src="@drawable/dn03"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            android:scaleType="centerCrop" />-->
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/state_image"
             android:contentDescription="@string/image_description"
             tools:src="@drawable/dn03"
+            fresco:roundedCornerRadius="8dp"
+            fresco:roundTopLeft="true"
+            fresco:roundTopRight="true"
+            fresco:roundBottomLeft="true"
+            fresco:roundBottomRight="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -39,7 +37,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorMask"
+            android:background="@drawable/city_mask_backgound"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="false">
             <TextView

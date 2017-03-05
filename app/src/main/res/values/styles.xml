@@ -23,4 +23,15 @@
         <item name="android:windowEnterAnimation">@anim/slide_up</item>
         <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
+
+    <!-- List item Text secondary style . -->
+    <style name="ContentItemTypeStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:lineSpacingMultiplier">1.1</item>
+        <item name="android:lines">1</item>
+    </style>
+
 </resources>

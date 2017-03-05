@@ -7,18 +7,6 @@
     android:background="@drawable/selectable_item"
     android:foreground="?android:attr/selectableItemBackground">
 
-
-    <!--<ImageView
-        android:id="@+id/state_image"
-        tools:src="@drawable/d01"
-        android:contentDescription="@string/image_description"
-        android:layout_width="@dimen/image_width"
-        android:layout_height="@dimen/image_height"
-        android:layout_alignParentLeft="false"
-        android:layout_centerVertical="true"
-        android:scaleType="centerCrop"
-        android:layout_marginLeft="@dimen/image_left_margin"
-        android:layout_marginRight="@dimen/image_right_margin" />-->
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/state_image"
         tools:src="@drawable/d01"

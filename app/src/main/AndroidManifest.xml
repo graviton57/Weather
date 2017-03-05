@@ -36,6 +36,15 @@
             android:name=".activity.AddCityActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/item_settings"
+            android:parentActivityName=".activity.CitiesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.havrylyuk.weather.activity.CitiesActivity" />
+        </activity>
+
         <!-- Services -->
         <service
             android:name=".service.WeatherService"

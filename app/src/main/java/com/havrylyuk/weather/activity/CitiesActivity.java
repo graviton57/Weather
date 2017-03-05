@@ -63,8 +63,8 @@ public class CitiesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
         localDataSource = LocalDataSource.getInstance(this);
-        IntentFilter filter = new IntentFilter(SyncContentReceiver.SYNC_RESPONSE_STATUS);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        IntentFilter filter = new IntentFilter(WeatherService.ACTION_DATA_UPDATED);
+        //filter.addCategory(Intent.CATEGORY_DEFAULT);
         syncContentReceiver = new SyncContentReceiver();
         registerReceiver(syncContentReceiver, filter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -190,6 +190,9 @@ public class CitiesActivity extends AppCompatActivity {
                 if (exitDialog == null) exitDialog = AboutDialog.newInstance();
                 if (!exitDialog.isAdded()) exitDialog.show(getFragmentManager().beginTransaction(), AboutDialog.ABOUT_DIALOG_TAG);
                 return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -208,7 +211,7 @@ public class CitiesActivity extends AppCompatActivity {
     }
 
     public class SyncContentReceiver extends BroadcastReceiver {
-        public static final String SYNC_RESPONSE_STATUS = "com.havrylyuk.weather.intent.action.SYNC_RESPONSE_STATUS";
+
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean sync = intent.getIntExtra(WeatherService.EXTRA_KEY_SYNC, 0) == 1;

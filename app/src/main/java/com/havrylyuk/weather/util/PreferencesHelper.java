@@ -1,7 +1,9 @@
 package com.havrylyuk.weather.util;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.WeatherApp;
 
 import org.greenrobot.greendao.annotation.NotNull;
@@ -31,14 +33,14 @@ public class PreferencesHelper {
     }
 
     //for save data in SharedPreferences
-    public void setUnits(String name, @NotNull String units){
-        editor.putString(name, units);
+    public void setUnits(Context context, @NotNull String units){
+        editor.putString(context.getString(R.string.pref_unit_key), units);
         editor.apply();
     }
 
     //for the loading of data from SharedPreferences
-    public String getUnits(String prefName){
-        return sharedPreferences.getString(prefName, "metric");
+    public String getUnits(String key){
+        return sharedPreferences.getString(key, Utility.getDefaultUnit());
     }
 
 
@@ -52,13 +54,13 @@ public class PreferencesHelper {
         return sharedPreferences.getInt(prefName, 7);
     }
 
-    public void setUseLocation(String name, boolean useLocation){
-        editor.putBoolean(name, useLocation);
+    public void setUseLocation(Context context, boolean useLocation){
+        editor.putBoolean(context.getString(R.string.pref_enable_location_key), useLocation);
         editor.apply();
     }
 
-    public boolean getUseLocation(String prefName){
-        return sharedPreferences.getBoolean(prefName, true);
+    public boolean getUseLocation(Context context){
+        return sharedPreferences.getBoolean(context.getString(R.string.pref_enable_location_key), true);
     }
 
 
