@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
+import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.adapter.AddCityRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
@@ -79,11 +80,9 @@ public class AddCityActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-        localDataSource = LocalDataSource.getInstance(getApplicationContext());
+        localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
         service = GeoNameApiClient.getClient().create(GeoNamesService.class);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
-        assert recyclerView != null;
-        setupRecyclerView(recyclerView);
+        setupRecyclerView();
         mSearchState = (TextView) findViewById(R.id.textView);
         mImageView = (SimpleDraweeView) findViewById(R.id.imageView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -95,7 +94,8 @@ public class AddCityActivity extends AppCompatActivity {
         }
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.city_search_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerView.setLayoutManager(layoutManager);
@@ -262,7 +262,6 @@ public class AddCityActivity extends AppCompatActivity {
                 mImageView.setVisibility(View.GONE);
             }
         }
-
     }
 
     private void setSearchStateVisible(boolean visible) {

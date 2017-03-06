@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
+import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.adapter.DaysViewPagerAdapter;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
@@ -66,7 +67,8 @@ public class CityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pref = PreferencesHelper.getInstance();
-        localDataSource = LocalDataSource.getInstance(getContext());
+        //localDataSource = LocalDataSource.getInstance(getContext());
+        localDataSource = ((WeatherApp) getActivity().getApplicationContext()).getLocalDataSource();
         if (savedInstanceState != null) {
             long cityId = getArguments().getLong(ARG_ITEM_ID);
             openCity((int) cityId);

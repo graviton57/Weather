@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
+import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.adapter.CitiesRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
@@ -62,7 +63,7 @@ public class CitiesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
-        localDataSource = LocalDataSource.getInstance(this);
+        localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
         IntentFilter filter = new IntentFilter(WeatherService.ACTION_DATA_UPDATED);
         syncContentReceiver = new SyncContentReceiver();
         registerReceiver(syncContentReceiver, filter);
@@ -86,7 +87,11 @@ public class CitiesActivity extends AppCompatActivity {
         }
         setupRecyclerView();
         setupSwipeRefreshLayout();
-        loadData();
+        if (savedInstanceState == null) {
+            updateData();
+        } else {
+            loadData();
+        }
     }
 
     private void setupSwipeRefreshLayout(){

@@ -26,6 +26,7 @@ import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.havrylyuk.weather.R;
+import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.activity.CitiesActivity;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmWeather;
@@ -64,7 +65,7 @@ public class TodayWidgetIntentService extends IntentService {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
                     TodayWidgetProvider.class));
-            ILocalDataSource localDataSource = LocalDataSource.getInstance(this);
+            ILocalDataSource localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
             OrmCity ormCity = localDataSource.getCityList().get(0);
             String cityName = null;
             String description = null;

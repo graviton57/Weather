@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.havrylyuk.weather.R;
+import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.adapter.HoursRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
@@ -51,7 +52,8 @@ public class DayWeatherFragment extends Fragment  {
         View view = inflater.inflate(R.layout.tabs, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.hour_list);
         setupRecyclerView(recyclerView);
-        ILocalDataSource localDataSource = LocalDataSource.getInstance(getContext());
+        //ILocalDataSource localDataSource = LocalDataSource.getInstance(getContext());
+        ILocalDataSource localDataSource = ((WeatherApp) getActivity().getApplicationContext()).getLocalDataSource();
         addWeathersToList(localDataSource.getForecast(getArguments().getInt(CITY_ID),
                 new Date(getArguments().getLong(DATE))));
 
