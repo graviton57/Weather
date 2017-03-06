@@ -22,8 +22,8 @@ import com.havrylyuk.weather.fragment.CityDetailFragment;
  */
 public class CityDetailActivity extends AppCompatActivity {
 
-    public static final String TRANSITION_NAME = "transition_name";
-    public static final String IMAGE_NAME = "image_name";
+    public static final String TRANSITION_NAME = "com.havrylyuk.weather.transition_name";
+    public static final String IMAGE_NAME = "com.havrylyuk.weather.image_name";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

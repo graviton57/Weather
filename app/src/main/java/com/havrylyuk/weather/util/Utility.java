@@ -75,6 +75,7 @@ public class Utility {
                 return isDay?"03d.jpg":"03n.jpg";
             case 1098:
             case 1240:
+            case 1189:
             case 1243:
                 return isDay?"05d.jpg":"05n.jpg";
             case 1009:

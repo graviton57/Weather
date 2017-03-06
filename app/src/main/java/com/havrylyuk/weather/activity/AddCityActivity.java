@@ -35,6 +35,7 @@ import com.havrylyuk.weather.data.model.GeoCities;
 import com.havrylyuk.weather.data.model.GeoCity;
 import com.havrylyuk.weather.data.remote.GeoNameApiClient;
 import com.havrylyuk.weather.data.remote.GeoNamesService;
+import com.havrylyuk.weather.service.WeatherService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +108,8 @@ public class AddCityActivity extends AppCompatActivity {
                         newCity.getCountryName(), Double.parseDouble(newCity.getLat()),
                         Double.parseDouble(newCity.getLng()));
                 localDataSource.saveCity(city);
+                Intent serviceIntent = new Intent(AddCityActivity.this, WeatherService.class);
+                startService(serviceIntent);
                 Intent intent = new Intent(AddCityActivity.this, CitiesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
