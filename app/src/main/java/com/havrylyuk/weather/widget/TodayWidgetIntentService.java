@@ -98,7 +98,7 @@ public class TodayWidgetIntentService extends IntentService {
                     if (cityName!=null) views.setTextViewText(R.id.widget_city_name, cityName);
                     if (date!=null) views.setTextViewText(R.id.widget_weather_date, date);
                     if (formatTemp!=null) views.setTextViewText(R.id.widget_high_temperature, formatTemp);
-                    if (weatherIcon != null) loadWeatherIcon(views, weatherIcon);
+                    if (weatherIcon != null) loadWeatherIcon(appWidgetManager, appWidgetId, views, weatherIcon);
                     // Create an Intent to launch CitiesActivity
                     Intent launchIntent = new Intent(this, CitiesActivity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);
@@ -117,7 +117,8 @@ public class TodayWidgetIntentService extends IntentService {
        }
     }
 
-    private void loadWeatherIcon(final RemoteViews views, String imageUri) {
+    private void loadWeatherIcon(final AppWidgetManager appWidgetManager, final int appWidgetId,
+                                 final RemoteViews views, String imageUri) {
         ImageRequest imageRequest = ImageRequestBuilder
                 .newBuilderWithSource(Uri.parse(imageUri))
                 .setRotationOptions(RotationOptions.autoRotate())
@@ -133,6 +134,7 @@ public class TodayWidgetIntentService extends IntentService {
                 if (dataSource.isFinished() && bitmap != null){
                     Bitmap bmp = Bitmap.createBitmap(bitmap);
                     views.setImageViewBitmap(R.id.widget_icon, bmp);
+                    appWidgetManager.updateAppWidget(appWidgetId, views);
                     dataSource.close();
                 }
             }
