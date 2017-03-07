@@ -108,8 +108,6 @@ public class AddCityActivity extends AppCompatActivity {
                         newCity.getCountryName(), Double.parseDouble(newCity.getLat()),
                         Double.parseDouble(newCity.getLng()));
                 localDataSource.saveCity(city);
-                Intent serviceIntent = new Intent(AddCityActivity.this, WeatherService.class);
-                startService(serviceIntent);
                 Intent intent = new Intent(AddCityActivity.this, CitiesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

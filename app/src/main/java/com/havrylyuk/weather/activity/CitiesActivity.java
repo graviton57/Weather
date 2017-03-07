@@ -8,12 +8,10 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -27,17 +25,16 @@ import android.widget.Toast;
 
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
-import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.adapter.CitiesRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
-import com.havrylyuk.weather.data.local.ILocalDataSource;
-import com.havrylyuk.weather.data.local.LocalDataSource;
 import com.havrylyuk.weather.data.model.CityWithWeather;
-
 import com.havrylyuk.weather.dialog.AboutDialog;
+import com.havrylyuk.weather.events.ContentChangeEvent;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
 import com.havrylyuk.weather.service.WeatherService;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,31 +44,52 @@ import java.util.List;
  * Created by Igor Havrylyuk on 16.02.2017.
  */
 
-public class CitiesActivity extends AppCompatActivity {
-
+public class CitiesActivity extends BaseActivity  {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private boolean mTwoPane;
     private CitiesRecyclerViewAdapter mAdapter;
     private final static String FRAGMENT_TAG = "fragment_tag";
     private SyncContentReceiver syncContentReceiver;
-    private ILocalDataSource localDataSource;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cities);
-        localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         IntentFilter filter = new IntentFilter(WeatherService.ACTION_DATA_UPDATED);
         syncContentReceiver = new SyncContentReceiver();
         registerReceiver(syncContentReceiver, filter);
+        setupToolbar();
+        setupFabButton();
+        if (findViewById(R.id.city_detail_container) != null) {
+            mTwoPane = true;
+        }
+        setupRecyclerView();
+        setupSwipeRefreshLayout();
+        if (savedInstanceState == null) {
+            updateWeatherData();
+        } else {
+            loadDataFromDb();
+        }
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.activity_cities;
+    }
+
+    private void setupToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
+    }
+
+    private void setupFabButton(){
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
@@ -82,16 +100,6 @@ public class CitiesActivity extends AppCompatActivity {
                 }
             });
         }
-        if (findViewById(R.id.city_detail_container) != null) {
-            mTwoPane = true;
-        }
-        setupRecyclerView();
-        setupSwipeRefreshLayout();
-        if (savedInstanceState == null) {
-            updateData();
-        } else {
-            loadData();
-        }
     }
 
     private void setupSwipeRefreshLayout(){
@@ -99,7 +107,7 @@ public class CitiesActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateData();
+                updateWeatherData();
             }
         });
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -204,7 +212,7 @@ public class CitiesActivity extends AppCompatActivity {
         }
     }
 
-    private void loadData(){
+    private void loadDataFromDb(){
         List<CityWithWeather> cityWithWeatherList = new ArrayList<>();
         for (OrmCity ormCity : localDataSource.getCityList()) {
             CityWithWeather cityWithWeather = new CityWithWeather();
@@ -216,7 +224,8 @@ public class CitiesActivity extends AppCompatActivity {
             mAdapter.setCities(cityWithWeatherList);
         }
     }
-    private void updateData() {
+
+    private void updateWeatherData() {
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
            Intent intent = new Intent(this, WeatherService.class);
            startService(intent);
@@ -225,7 +234,14 @@ public class CitiesActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         unregisterReceiver(syncContentReceiver);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe
+    public void onEvent(ContentChangeEvent event) {
+        // reload data from network
+        updateWeatherData();
     }
 
     public class SyncContentReceiver extends BroadcastReceiver {
@@ -236,7 +252,7 @@ public class CitiesActivity extends AppCompatActivity {
             if (!sync) {
                 if (BuildConfig.DEBUG) Toast.makeText(CitiesActivity.this,"Sync complete",Toast.LENGTH_SHORT).show();
                 mSwipeRefreshLayout.setRefreshing(false);
-                loadData();
+                loadDataFromDb();
             }
         }
     }

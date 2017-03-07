@@ -2,13 +2,17 @@ package com.havrylyuk.weather.data.local;
 
 import android.content.Context;
 
+import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.dao.DaoMaster;
 import com.havrylyuk.weather.dao.DaoSession;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmCityDao;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.dao.OrmWeatherDao;
+import com.havrylyuk.weather.events.ContentChangeEvent;
 import com.havrylyuk.weather.util.Utility;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -97,12 +101,14 @@ public class LocalDataSource implements ILocalDataSource {
         if (cities.size() > 0) {
             return cities;
         } else {
-            cities.add(new OrmCity((long)1, "Chernivtsi", "Chernivetska Oblast", "Ukraine", 48.3, 25.93));
-            cities.add(new OrmCity((long)2, "Kiev", "Kievska Oblast", "Ukraine", 50.43, 30.52));
-            cities.add(new OrmCity((long)3, "Lviv", "L'vivs'ka Oblast'", "Ukraine", 49.83, 24.0));
-            cities.add(new OrmCity((long)4, "London", "GeoCity of London, Greater London", "United Kingdom", 51.52, -0.11));
-            cities.add(new OrmCity((long)5, "Madrid", "Madrid", "Spain", 40.4, -3.68));
-            saveCities(cities);
+            if (BuildConfig.DEBUG) {
+            /*cities.add(new OrmCity((long)2, "Chernivtsi", "Chernivetska Oblast", "Ukraine", 48.3, 25.93));
+            cities.add(new OrmCity((long)3, "Kiev", "Kievska Oblast", "Ukraine", 50.43, 30.52));
+            cities.add(new OrmCity((long)4, "Lviv", "L'vivs'ka Oblast'", "Ukraine", 49.83, 24.0));
+            cities.add(new OrmCity((long)5, "London", "GeoCity of London, Greater London", "United Kingdom", 51.52, -0.11));
+            cities.add(new OrmCity((long)6, "Madrid", "Madrid", "Spain", 40.4, -3.68));
+            saveCities(cities);*/
+            }
             return cities;
         }
     }
@@ -136,7 +142,8 @@ public class LocalDataSource implements ILocalDataSource {
     @Override
     public void saveCity(OrmCity city) {
         OrmCityDao cityDao = mDaoSession.getOrmCityDao();
-        cityDao.insertOrReplace(city);
+        long id = cityDao.insertOrReplace(city);
+        EventBus.getDefault().post(new ContentChangeEvent(id));
     }
 
     @Override

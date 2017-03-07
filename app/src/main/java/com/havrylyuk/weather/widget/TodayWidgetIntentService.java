@@ -58,11 +58,12 @@ public class TodayWidgetIntentService extends IntentService {
                 .equals(pref.getUnits(getString(R.string.pref_unit_key)));
         if (intent != null  ) {
             boolean sync = intent.getIntExtra(WeatherService.EXTRA_KEY_SYNC, 0) == 1;
-            Log.d(LOG_TAG,"onHandleIntent action update show progress sync="+sync);
+            Log.d(LOG_TAG, "onHandleIntent action update show progress sync=" + sync);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
                     TodayWidgetProvider.class));
             ILocalDataSource localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
+            if (localDataSource.getCityList() != null && !localDataSource.getCityList().isEmpty()) {
             OrmCity ormCity = localDataSource.getCityList().get(0);
             String cityName = null;
             String description = null;
@@ -111,6 +112,7 @@ public class TodayWidgetIntentService extends IntentService {
                     // Tell the AppWidgetManager to perform an update on the current app widget
                     appWidgetManager.updateAppWidget(appWidgetId, views);
                 }
+            }
        }
     }
 
