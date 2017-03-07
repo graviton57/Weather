@@ -46,6 +46,8 @@ dependencies {
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     compile "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
+    compile "com.google.android.gms:play-services-location:$playServicesVersion"
+
     compile "com.facebook.fresco:fresco:$frescoVersion"
 
     testCompile "junit:junit:$junitVersion"
