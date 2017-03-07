@@ -40,6 +40,7 @@ dependencies {
     compile "com.android.support:cardview-v7:$supportVersion"
 
     compile "org.greenrobot:greendao:$greenDaoVersion"
+    compile "org.greenrobot:eventbus:$eventBusVersion"
 
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"

@@ -22,7 +22,6 @@ import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.adapter.DaysViewPagerAdapter;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
-import com.havrylyuk.weather.data.local.LocalDataSource;
 import com.havrylyuk.weather.data.model.DayPager;
 import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;

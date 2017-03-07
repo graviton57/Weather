@@ -3,6 +3,7 @@ ext {
     okhttpVersion = '3.4.1'
     retrofitVersion = '2.1.0'
     greenDaoVersion = '3.2.0'
+    eventBusVersion = '3.0.0'
     frescoVersion = '1.1.0'
     playServicesVersion = '10.2.0'
     junitVersion = '4.12'
