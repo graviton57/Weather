@@ -10,6 +10,7 @@ import com.havrylyuk.weather.dao.OrmCityDao;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.dao.OrmWeatherDao;
 import com.havrylyuk.weather.events.ContentChangeEvent;
+import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,11 +28,13 @@ public class LocalDataSource implements ILocalDataSource {
     private static final String DB_NAME = "weather.db";
     private static ILocalDataSource INSTANCE;
     private DaoSession mDaoSession;
+    private Context context;
 
     private LocalDataSource(Context context) {
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
         DaoMaster daoMaster = new DaoMaster(devOpenHelper.getWritableDatabase());
         mDaoSession = daoMaster.newSession();
+        this.context = context;
     }
 
     public static ILocalDataSource getInstance(Context context) {
@@ -101,13 +104,11 @@ public class LocalDataSource implements ILocalDataSource {
         if (cities.size() > 0) {
             return cities;
         } else {
-            if (BuildConfig.DEBUG) {
-            /*cities.add(new OrmCity((long)2, "Chernivtsi", "Chernivetska Oblast", "Ukraine", 48.3, 25.93));
-            cities.add(new OrmCity((long)3, "Kiev", "Kievska Oblast", "Ukraine", 50.43, 30.52));
-            cities.add(new OrmCity((long)4, "Lviv", "L'vivs'ka Oblast'", "Ukraine", 49.83, 24.0));
-            cities.add(new OrmCity((long)5, "London", "GeoCity of London, Greater London", "United Kingdom", 51.52, -0.11));
-            cities.add(new OrmCity((long)6, "Madrid", "Madrid", "Spain", 40.4, -3.68));
-            saveCities(cities);*/
+            if (!PreferencesHelper.getInstance().isUseCurrentLocation(context)) {
+            cities.add(new OrmCity((long)2, "Kiev", "Kievska Oblast", "Ukraine", 50.43, 30.52));
+            cities.add(new OrmCity((long)3, "London", "GeoCity of London, Greater London", "United Kingdom", 51.52, -0.11));
+            cities.add(new OrmCity((long)4, "Madrid", "Madrid", "Spain", 40.4, -3.68));
+            saveCities(cities);
             }
             return cities;
         }

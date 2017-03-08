@@ -51,7 +51,7 @@
     <string name="format_widget_temperature"><xliff:g id="temp">%1.0f</xliff:g><xliff:g id="unit">%2$s</xliff:g></string>
     <!-- Strings strings -->
     <string name="pref_header_general">General</string>
-    <string name="pref_enable_location_key" translatable="false">pref_enable_lacation_key</string>
+    <string name="pref_use_current_location_key" translatable="false">pref_enable_lacation_key</string>
     <string name="item_settings">Settings</string>
     <string name="pref_enable_location_summary">Enable locations</string>
     <string name="pref_enable_location_title">Locations</string>

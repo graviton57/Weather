@@ -6,7 +6,7 @@
 
         <SwitchPreference
             android:defaultValue="true"
-            android:key="@string/pref_enable_location_key"
+            android:key="@string/pref_use_current_location_key"
             android:summary="@string/pref_enable_location_summary"
             android:title="@string/pref_enable_location_title" />
 

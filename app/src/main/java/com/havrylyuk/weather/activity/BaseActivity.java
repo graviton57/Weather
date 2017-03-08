@@ -22,6 +22,7 @@ import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
+import com.havrylyuk.weather.util.PreferencesHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,7 +51,9 @@ public abstract class BaseActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
         setContentView(getLayout());
-        askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, PERMISSIONS_REQUEST_LOCATION);
+        if (savedInstanceState == null && PreferencesHelper.getInstance().isUseCurrentLocation(this)) {
+            askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, PERMISSIONS_REQUEST_LOCATION);
+        }
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -115,7 +118,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
                 == PackageManager.PERMISSION_GRANTED) {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (lastLocation != null) {
-                parseLocation(lastLocation);
+                updateCurrentLocation(lastLocation);
             }
         }
     }
@@ -130,7 +133,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
         if (BuildConfig.DEBUG) Log.d(LOG_TAG,"onConnectionSuspended i="+i);
     }
 
-    private void parseLocation(Location location) {
+    private void updateCurrentLocation(Location location) {
         Geocoder geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
         List<Address> addresses;
         try {

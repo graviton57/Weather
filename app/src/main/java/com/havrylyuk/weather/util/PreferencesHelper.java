@@ -54,13 +54,13 @@ public class PreferencesHelper {
         return sharedPreferences.getInt(prefName, 7);
     }
 
-    public void setUseLocation(Context context, boolean useLocation){
-        editor.putBoolean(context.getString(R.string.pref_enable_location_key), useLocation);
+    public void setUseCurrentLocation(Context context, boolean useLocation){
+        editor.putBoolean(context.getString(R.string.pref_use_current_location_key), useLocation);
         editor.apply();
     }
 
-    public boolean getUseLocation(Context context){
-        return sharedPreferences.getBoolean(context.getString(R.string.pref_enable_location_key), true);
+    public boolean isUseCurrentLocation(Context context){
+        return sharedPreferences.getBoolean(context.getString(R.string.pref_use_current_location_key), true);
     }
 
 

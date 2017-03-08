@@ -18,6 +18,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.havrylyuk.weather.dialog.AboutDialog;
 import com.havrylyuk.weather.events.ContentChangeEvent;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
 import com.havrylyuk.weather.service.WeatherService;
+import com.havrylyuk.weather.util.PreferencesHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,11 +71,7 @@ public class CitiesActivity extends BaseActivity  {
         }
         setupRecyclerView();
         setupSwipeRefreshLayout();
-        if (savedInstanceState == null) {
-            updateWeatherData();
-        } else {
-            loadDataFromDb();
-        }
+        loadDataFromDb();
     }
 
     @Override
@@ -107,7 +105,7 @@ public class CitiesActivity extends BaseActivity  {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateWeatherData();
+                updateDataFromNetwork();
             }
         });
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -225,7 +223,7 @@ public class CitiesActivity extends BaseActivity  {
         }
     }
 
-    private void updateWeatherData() {
+    private void updateDataFromNetwork() {
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
            Intent intent = new Intent(this, WeatherService.class);
            startService(intent);
@@ -240,8 +238,8 @@ public class CitiesActivity extends BaseActivity  {
 
     @Subscribe
     public void onEvent(ContentChangeEvent event) {
-        // reload data from network
-        updateWeatherData();
+        Log.d("CitiesActivity", "onEvent reload data from network");
+        updateDataFromNetwork();
     }
 
     public class SyncContentReceiver extends BroadcastReceiver {
