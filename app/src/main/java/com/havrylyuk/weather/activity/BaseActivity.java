@@ -122,7 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-      if (BuildConfig.DEBUG) Log.d(LOG_TAG, connectionResult.getErrorMessage());
+      if (BuildConfig.DEBUG) Log.d(LOG_TAG, connectionResult.toString());
     }
 
     @Override

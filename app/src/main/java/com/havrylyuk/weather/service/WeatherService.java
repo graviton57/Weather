@@ -37,7 +37,7 @@ import retrofit2.Call;
 
 public class WeatherService extends IntentService {
 
-    public static final int FORECAST_COUNT_DAYS = 7;
+    public static final int FORECAST_COUNT_DAYS = 3;
     public static final String EXTRA_KEY_SYNC =
             "com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
     public static final String ACTION_DATA_UPDATED =
@@ -57,7 +57,7 @@ public class WeatherService extends IntentService {
 
     public WeatherService() {
         super("WeatherService");
-        fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
+        fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
     }
 
@@ -168,7 +168,6 @@ public class WeatherService extends IntentService {
     private void updateSyncStatus(int status) {
         Intent intentUpdate = new Intent();
         intentUpdate.setAction(ACTION_DATA_UPDATED);
-       // intentUpdate.addCategory(Intent.CATEGORY_DEFAULT);
         intentUpdate.setPackage(getPackageName());
         intentUpdate.putExtra(EXTRA_KEY_SYNC, status);
         sendBroadcast(intentUpdate);

@@ -3,6 +3,7 @@ package com.havrylyuk.weather.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +92,6 @@ public class HoursRecyclerViewAdapter extends RecyclerView.Adapter<HoursRecycler
                 isMetric ? "mmHg." : "psi");
         holder.pressure.setText(pressureText);
         ImageHelper.load("http:" + mHours.get(position).getIcon(), holder.weatherState);
-        final String message = mHours.get(position).getCondition_text();
         holder.weatherState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
