@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.CityDetailActivity"
     tools:ignore="MergeRootFrame">
 
@@ -31,7 +32,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
+                android:scaleType="center"
+                fresco:fadeDuration="300"
+                fresco:progressBarImage="@drawable/loading"
+                fresco:progressBarAutoRotateInterval="1000"
+                fresco:progressBarImageScaleType="centerInside"
                 app:layout_collapseMode="parallax"
                 tools:ignore="InconsistentLayout" />
             <RelativeLayout
