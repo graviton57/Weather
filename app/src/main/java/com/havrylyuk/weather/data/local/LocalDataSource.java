@@ -138,6 +138,8 @@ public class LocalDataSource implements ILocalDataSource {
     public void saveCities(List<OrmCity> cities) {
         OrmCityDao cityDao = mDaoSession.getOrmCityDao();
         cityDao.insertInTx(cities);
+        if (cities!=null && !cities.isEmpty())
+        EventBus.getDefault().post(new ContentChangeEvent(cities.size()));
     }
 
     @Override
