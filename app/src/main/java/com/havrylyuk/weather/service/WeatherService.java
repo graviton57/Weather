@@ -51,7 +51,6 @@ public class WeatherService extends IntentService {
 
 
     private ILocalDataSource localDataSource;
-    private OpenWeatherService service;
     private final SimpleDateFormat fmt;
     private boolean isMetric;
 
@@ -71,12 +70,12 @@ public class WeatherService extends IntentService {
             updateSyncStatus(START_SYNC);
             if (Utility.isNetworkAvailable(getApplicationContext())) {
                 localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
-                service = WeatherApiClient.getClient().create(OpenWeatherService.class);
+                final OpenWeatherService service = WeatherApiClient.getClient().create(OpenWeatherService.class);
                 List<OrmCity> cities = localDataSource.getCityList();
                 if (cities != null && !cities.isEmpty()) {
                     localDataSource.deleteAllForecast();//delete old forecast data
                     for (OrmCity city : cities) {
-                        getWeatherForCity(city);
+                        getWeatherForCity(service, city);
                     }
 
                 } else  if (BuildConfig.DEBUG) Log.d(LOG_TAG, "empty cities table");
@@ -88,7 +87,7 @@ public class WeatherService extends IntentService {
         }
     }
 
-    private void getWeatherForCity(OrmCity city) {
+    private void getWeatherForCity(OpenWeatherService service, OrmCity city) {
         String latLng = String.valueOf(city.getLat()) + " , " + String.valueOf(city.getLon());
         Call<ForecastWeather> responseCall =
                 service.getWeather(BuildConfig.WEATHER_API_KEY, latLng, String.valueOf(FORECAST_COUNT_DAYS));
