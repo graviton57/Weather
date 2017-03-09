@@ -54,7 +54,7 @@ public class AddCityActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = AddCityActivity.class.getSimpleName();
     private static final int MAX_CITIES_LIST_SIZE = 16;
-    private static final String CITIES_STYLE = "cities15000";
+    private static final String CITIES_STYLE = "cities1000";//"cities5000" or "cities15000"
 
     private AddCityRecyclerViewAdapter mAdapter;
     private ProgressBar mProgressBar;

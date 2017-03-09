@@ -238,7 +238,7 @@ public class CitiesActivity extends BaseActivity  {
 
     @Subscribe
     public void onEvent(ContentChangeEvent event) {
-        Log.d("CitiesActivity", "onEvent reload data from network");
+        if (BuildConfig.DEBUG) Log.d("CitiesActivity", "onEvent reload data from network");
         updateDataFromNetwork();
     }
 

@@ -66,7 +66,6 @@ public class CityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pref = PreferencesHelper.getInstance();
-        //localDataSource = LocalDataSource.getInstance(getContext());
         localDataSource = ((WeatherApp) getActivity().getApplicationContext()).getLocalDataSource();
         if (savedInstanceState != null) {
             long cityId = getArguments().getLong(ARG_ITEM_ID);
