@@ -121,13 +121,13 @@ public class WeatherService extends IntentService {
         }
         weather.setClouds(current.getCloud());
         weather.setHumidity(current.getHumidity());
-        weather.setPressure(isMetric ? current.getPressureMb() * 0.750062 : current.getPressureIn());//convert to mmHg.
+        weather.setPressure(isMetric ? convertMbToMmHg(current.getPressureMb()) : current.getPressureIn());
         weather.setTemp(isMetric?current.getTempC():current.getTempF());
         weather.setIs_day(current.getIs_day()==1);
         weather.setIcon(current.getCondition().getIcon());
         weather.setCondition_text(current.getCondition().getText());
         weather.setCondition_code(current.getCondition().getCode());
-        weather.setWind_speed(isMetric ? current.getWindKph() * 0.277778 : current.getWindMph());//convert to m/s
+        weather.setWind_speed(isMetric ? convertKphToMps(current.getWindKph()) : current.getWindMph());
         weather.setWind_dir(response.getCurrent().getWindDir());
         return weather;
     }
@@ -143,12 +143,12 @@ public class WeatherService extends IntentService {
                         weather.setDt(fmt.parse(hour.getTime()));
                         weather.setClouds(hour.getCloud());
                         weather.setHumidity(hour.getHumidity());
-                        weather.setPressure(isMetric ? hour.getPressureMb() * 0.750062 : hour.getPressureIn());
+                        weather.setPressure(isMetric ? convertMbToMmHg(hour.getPressureMb()) : hour.getPressureIn());
                         weather.setTemp(isMetric ? hour.getTempC() : hour.getTempF());
                         weather.setTemp_min(isMetric ?forecastDay.getDay().getMintempC():forecastDay.getDay().getMintempF());
                         weather.setTemp_max(isMetric ?forecastDay.getDay().getMaxtempC():forecastDay.getDay().getMaxtempF());
                         weather.setIcon(hour.getCondition().getIcon());
-                        weather.setWind_speed(isMetric ? hour.getWindKph() * 0.277778 : hour.getWindMph());
+                        weather.setWind_speed(isMetric ? convertKphToMps(hour.getWindKph()) : hour.getWindMph());
                         weather.setWind_dir(hour.getWindDir());
                         weather.setRain(hour.getWillItRain());
                         weather.setSnow(hour.getWillItSnow());
@@ -170,6 +170,16 @@ public class WeatherService extends IntentService {
         intentUpdate.setPackage(getPackageName());
         intentUpdate.putExtra(EXTRA_KEY_SYNC, status);
         sendBroadcast(intentUpdate);
+    }
+
+    //convert MilliBars to mmHg.
+    private Double convertMbToMmHg(Double pressureInMb){
+        return pressureInMb * 0.750062;
+    }
+
+    // convert Km per hour to m/s
+    private Double convertKphToMps(Double windKph){
+        return windKph * 0.277778;
     }
 
 }
