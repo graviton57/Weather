@@ -47,6 +47,7 @@ dependencies {
     compile "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
     compile "com.google.android.gms:play-services-location:$playServicesVersion"
+    compile "com.firebase:firebase-jobdispatcher:$jobDispatcherVersion"
 
     compile "com.facebook.fresco:fresco:$frescoVersion"
 

@@ -6,6 +6,7 @@ ext {
     eventBusVersion = '3.0.0'
     frescoVersion = '1.1.0'
     playServicesVersion = '10.2.0'
+    jobDispatcherVersion= '0.5.2'
     junitVersion = '4.12'
     espressoVersion = '2.2.2'
 }
