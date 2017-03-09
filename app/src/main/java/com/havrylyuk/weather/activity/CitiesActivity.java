@@ -24,6 +24,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.Driver;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.Trigger;
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.adapter.CitiesRecyclerViewAdapter;
@@ -32,6 +39,7 @@ import com.havrylyuk.weather.data.model.CityWithWeather;
 import com.havrylyuk.weather.dialog.AboutDialog;
 import com.havrylyuk.weather.events.ContentChangeEvent;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
+import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
 import com.havrylyuk.weather.util.PreferencesHelper;
 
@@ -225,8 +233,9 @@ public class CitiesActivity extends BaseActivity  {
 
     private void updateDataFromNetwork() {
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
-           Intent intent = new Intent(this, WeatherService.class);
-           startService(intent);
+          Intent intent = new Intent(this, WeatherService.class);
+          startService(intent);
+        //scheduleJob(this);
     }
 
     @Override
@@ -240,6 +249,45 @@ public class CitiesActivity extends BaseActivity  {
     public void onEvent(ContentChangeEvent event) {
         if (BuildConfig.DEBUG) Log.d("CitiesActivity", "onEvent reload data from network");
         updateDataFromNetwork();
+    }
+
+    public static void scheduleJob(Context context) {
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+        Job job = createJob(dispatcher);
+        int result = dispatcher.schedule(job);
+        if (result != FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS) {
+            Log.e("CitiesActivity","JobDispatcher error:" + result);
+        }
+    }
+
+    public static Job createJob(FirebaseJobDispatcher dispatcher){
+        Job job = dispatcher.newJobBuilder()
+                // persist the task across boots
+                .setLifetime(Lifetime.FOREVER)
+                // Call this service when the criteria are met.
+                .setService(WeatherJobService.class)
+                // unique id of the task
+                .setTag("WeatherTimeJob")
+                // We are mentioning that the job is not periodic.
+                .setRecurring(true)
+                // Run between 30 - 60 seconds from now.
+                .setTrigger(Trigger.executionWindow(5, 10))
+                //Run this job only when the network is avaiable.
+                .setConstraints(Constraint.ON_ANY_NETWORK)
+                .build();
+        return job;
+    }
+
+    public static Job updateJob(FirebaseJobDispatcher dispatcher) {
+        Job newJob = dispatcher.newJobBuilder()
+                //update if any task with the given tag exists.
+                .setReplaceCurrent(true)
+                .setService(WeatherJobService.class)
+                .setTag("WeatherTimeJob")
+                // Run between 60 - 120 seconds from now.
+                //.setTrigger(Trigger.executionWindow(60, 120))
+                .build();
+        return newJob;
     }
 
     public class SyncContentReceiver extends BroadcastReceiver {

@@ -31,6 +31,8 @@ Search City|Settings Activity | Widget
 * com.squareup.retrofit2:retrofit:2.1.0
 * com.squareup.retrofit2:converter-gson:2.1.0
 * com.squareup.okhttp3:logging-interceptor:3.3.1
+* com.google.android.gms:play-services-location:10.2.0
+* com.firebase:firebase-jobdispatcher:0.5.2
 * com.facebook.fresco:fresco:1.1.0
 
 Developed By

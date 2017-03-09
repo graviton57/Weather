@@ -1,10 +1,11 @@
 package com.havrylyuk.weather.service;
 
-import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.JobParameters;
+import com.firebase.jobdispatcher.JobService;
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.WeatherApp;
@@ -15,12 +16,11 @@ import com.havrylyuk.weather.data.model.Current;
 import com.havrylyuk.weather.data.model.ForecastDay;
 import com.havrylyuk.weather.data.model.ForecastWeather;
 import com.havrylyuk.weather.data.model.Hour;
-import com.havrylyuk.weather.data.remote.WeatherApiClient;
 import com.havrylyuk.weather.data.remote.OpenWeatherService;
+import com.havrylyuk.weather.data.remote.WeatherApiClient;
 import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,86 +29,97 @@ import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-/**
- *
- * Created by Igor Havrylyuk on 14.02.2017.
- */
+import static com.havrylyuk.weather.service.WeatherService.ACTION_DATA_UPDATED;
+import static com.havrylyuk.weather.service.WeatherService.EXTRA_KEY_SYNC;
+import static com.havrylyuk.weather.service.WeatherService.FORECAST_COUNT_DAYS;
 
-public class WeatherService extends IntentService {
+public class WeatherJobService extends JobService {
 
-    public static final int FORECAST_COUNT_DAYS = 3;
-    public static final String EXTRA_KEY_SYNC =
-            "com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
-    public static final String ACTION_DATA_UPDATED =
-            "com.havrylyuk.weather.app.ACTION_DATA_UPDATED";
+    private static final String LOG_TAG = WeatherJobService.class.getSimpleName();
+    private ILocalDataSource localDataSource;
+    private SimpleDateFormat fmt;
+    private boolean isMetric;
 
-    private static final String LOG_TAG = WeatherService.class.getSimpleName();
     private static final int START_SYNC = 1;
     private static final int END_SYNC = 2;
     private static final int ERROR_SYNC = 0;
 
-
-
-    private ILocalDataSource localDataSource;
-    private final SimpleDateFormat fmt;
-    private boolean isMetric;
-
-    public WeatherService() {
-        super("WeatherService");
-        fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+    public WeatherJobService() {
 
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        if (intent != null ) {
-            PreferencesHelper pref = PreferencesHelper.getInstance();
-            isMetric = getString(R.string.pref_unit_default_value)
-                    .equals(pref.getUnits(getString(R.string.pref_unit_key)));
-            if (BuildConfig.DEBUG) Log.d(LOG_TAG, " Beginning network data synchronization ");
-            updateSyncStatus(START_SYNC);
-            if (Utility.isNetworkAvailable(getApplicationContext())) {
-                localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
-                final OpenWeatherService service = WeatherApiClient.getClient().create(OpenWeatherService.class);
-                List<OrmCity> cities = localDataSource.getCityList();
-                if (cities != null && !cities.isEmpty()) {
-                    localDataSource.deleteAllForecast();//delete old forecast data
-                    for (OrmCity city : cities) {
-                        getWeatherForCity(service, city);
-                    }
-
-                }
-            } else    {
-                Log.d(LOG_TAG,getString(R.string.no_internet));
-            }
-            if (BuildConfig.DEBUG) Log.d(LOG_TAG, " End network data synchronization ");
-            updateSyncStatus(END_SYNC);
-        }
+    public boolean onStartJob(JobParameters job) {
+        Log.d(LOG_TAG, "onStartJob job=" + job.toString());
+        localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
+        fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        PreferencesHelper pref = PreferencesHelper.getInstance();
+        isMetric = getString(R.string.pref_unit_default_value)
+                .equals(pref.getUnits(getString(R.string.pref_unit_key)));
+        loadDataFromNetwork(job);
+        return true;
     }
 
-    private void getWeatherForCity(OpenWeatherService service, OrmCity city) {
+    @Override
+    public boolean onStopJob(JobParameters job) {
+        Log.d(LOG_TAG, "onStopJob job=" + job.toString());
+        return false;
+    }
+
+    private void loadDataFromNetwork(JobParameters parameters) {
+        if (BuildConfig.DEBUG) Log.d(LOG_TAG, " Beginning network data synchronization ");
+        updateSyncStatus(START_SYNC);
+        if (Utility.isNetworkAvailable(getApplicationContext())) {
+            final OpenWeatherService service = WeatherApiClient.getClient().create(OpenWeatherService.class);
+            List<OrmCity> cities = localDataSource.getCityList();
+            if (cities != null && !cities.isEmpty()) {
+                localDataSource.deleteAllForecast();//delete old forecast data
+                for (OrmCity city : cities) {
+                    getWeatherForCity(service, city);
+                }
+
+            } else  if (BuildConfig.DEBUG) Log.d(LOG_TAG, "empty cities table");
+
+        } else    {
+            Log.d(LOG_TAG,getString(R.string.no_internet));
+        }
+        updateSyncStatus(END_SYNC);
+        //Tell the framework that the job has completed and doesnot needs to be reschedule
+        jobFinished(parameters, false);
+    }
+
+    private void getWeatherForCity(OpenWeatherService service, final OrmCity city) {
         String latLng = String.valueOf(city.getLat()) + " , " + String.valueOf(city.getLon());
         Call<ForecastWeather> responseCall =
                 service.getWeather(BuildConfig.WEATHER_API_KEY, latLng, String.valueOf(FORECAST_COUNT_DAYS));
-        try {
-            ForecastWeather response = responseCall.execute().body();
-            if (response.getError() == null) {
-                List<OrmWeather> ormWeatherList = new ArrayList<>();
-                ormWeatherList.add(getCurrentOrmWeather(city.get_id(),response));
-                getHourlyOrmWeather(city.get_id(), response, ormWeatherList);
-                localDataSource.saveForecast(ormWeatherList);
-            } else {
-                Log.e(LOG_TAG, response.getError().getMessage());
-                Toast.makeText(getApplicationContext(), response.getError().getCode()+
-                        ":"+response.getError().getMessage(),Toast.LENGTH_SHORT).show();
-             }
-            } catch (IOException e) {
-                e.printStackTrace();
-                updateSyncStatus(ERROR_SYNC);
-            } catch (ParseException e) {
-                 e.printStackTrace();
-        }
+        responseCall.enqueue(new Callback<ForecastWeather>() {
+            @Override
+            public void onResponse(Call<ForecastWeather> call, Response<ForecastWeather> response) {
+                if (response.body().getError() == null) {
+                    List<OrmWeather> ormWeatherList = new ArrayList<>();
+                    try {
+                        ormWeatherList.add(getCurrentOrmWeather(city.get_id(), response.body()));
+                        getHourlyOrmWeather(city.get_id(), response.body(), ormWeatherList);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    localDataSource.saveForecast(ormWeatherList);
+                } else {
+                    Log.e(LOG_TAG, response.body().getError().getMessage());
+                    Toast.makeText(getApplicationContext(), response.body().getError().getCode()+
+                            ":"+response.body().getError().getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ForecastWeather> call, Throwable t) {
+                Log.e(LOG_TAG, t.toString());
+                Toast.makeText(getApplicationContext(), t.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private OrmWeather getCurrentOrmWeather(long cityId, ForecastWeather response ) throws ParseException {
@@ -175,5 +186,4 @@ public class WeatherService extends IntentService {
     private Double convertKphToMps(Double windKph){
         return windKph * 0.277778;
     }
-
 }
