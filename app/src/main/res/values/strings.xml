@@ -15,7 +15,7 @@
     <string name="format_pressure_hourly">%.0f <xliff:g id="pressure">%2$s</xliff:g></string>
     <string name="format_temp_plus" translatable="false">+%.1f <xliff:g id="unit">%2$s</xliff:g></string>
     <string name="format_temp_minus" translatable="false">%.1f <xliff:g id="unit">%2$s</xliff:g></string>
-
+    <string name="permission_denied">Permission denied!</string>
     <string name="no_internet">No Internet connection available…</string>
     <string name="image_description" translatable="false">Image</string>
     <string name="error">Error</string>
@@ -54,10 +54,13 @@
     <string name="pref_use_current_location_key" translatable="false">pref_enable_lacation_key</string>
     <string name="item_settings">Settings</string>
     <string name="pref_enable_location_summary">Enable locations</string>
-    <string name="pref_enable_location_title">Locations</string>
+    <string name="pref_enable_location_title">My locations</string>
     <string name="pref_general_key" translatable="false">pref_general_key</string>
     <string name="pref_unit_key" translatable="false">pref_unit_key</string>
-    <string name="pref_unit_title">Select unit</string>
-    <string name="permission_denied">Permission denied!</string>
+    <string name="pref_unit_title">Measure units</string>
+
+    <string name="pref_sync_title">Data update period</string>
+    <string name="pref_sync_key" translatable="false">pref_sync_key</string>
+
 
 </resources>

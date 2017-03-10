@@ -55,7 +55,7 @@ public class TodayWidgetIntentService extends IntentService {
         SimpleDateFormat format = new SimpleDateFormat("EE, dd MMM, HH:mm", Locale.getDefault());
         PreferencesHelper pref = PreferencesHelper.getInstance();
         boolean isMetric = getString(R.string.pref_unit_default_value)
-                .equals(pref.getUnits(getString(R.string.pref_unit_key)));
+                .equals(pref.getUnits(this));
         if (intent != null  ) {
             boolean sync = intent.getIntExtra(WeatherService.EXTRA_KEY_SYNC, 0) == 1;
             Log.d(LOG_TAG, "onHandleIntent action update show progress sync=" + sync);

@@ -39,20 +39,21 @@ public class PreferencesHelper {
     }
 
     //for the loading of data from SharedPreferences
-    public String getUnits(String key){
-        return sharedPreferences.getString(key, Utility.getDefaultUnit());
+    public String getUnits(Context context){
+        return sharedPreferences.getString(context.getString(R.string.pref_unit_key),
+                Utility.getDefaultUnit());
     }
 
-
-    public void setForecastDays(String name, int days){
-        editor.putInt(name, days);
+    public void setSyncInterval(Context context, @NotNull int interval){
+        editor.putInt(context.getString(R.string.pref_sync_key), interval);
         editor.apply();
     }
 
-
-    public int getForecastDays(String prefName){
-        return sharedPreferences.getInt(prefName, 7);
+    public String getSyncInterval(Context context){
+        return sharedPreferences.getString(context.getString(R.string.pref_sync_key)
+                , context.getString(R.string.pref_sync_default_value));
     }
+
 
     public void setUseCurrentLocation(Context context, boolean useLocation){
         editor.putBoolean(context.getString(R.string.pref_use_current_location_key), useLocation);

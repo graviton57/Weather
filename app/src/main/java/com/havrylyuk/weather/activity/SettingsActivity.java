@@ -19,6 +19,7 @@ import android.view.MenuItem;
 
 
 import com.havrylyuk.weather.R;
+import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
 
 import java.util.List;
@@ -126,6 +127,7 @@ public class SettingsActivity extends AbstractPreferenceActivity implements Shar
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_unit_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sync_key)));
         }
 
         @Override
@@ -144,6 +146,9 @@ public class SettingsActivity extends AbstractPreferenceActivity implements Shar
         if (TextUtils.equals(getString(R.string.pref_unit_key), key)) {
             startService(new Intent(this, WeatherService.class));
            }
+        if (TextUtils.equals(getString(R.string.pref_sync_key), key)) {
+            WeatherJobService.scheduleJob(this);
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

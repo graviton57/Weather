@@ -17,6 +17,12 @@
             android:key="@string/pref_unit_key"
             android:title="@string/pref_unit_title" />
 
+        <ListPreference
+            android:defaultValue="@string/pref_sync_default_value"
+            android:entries="@array/arr_sync_names"
+            android:entryValues="@array/arr_sync_values"
+            android:key="@string/pref_sync_key"
+            android:title="@string/pref_sync_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>

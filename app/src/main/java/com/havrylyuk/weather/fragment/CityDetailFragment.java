@@ -128,7 +128,7 @@ public class CityDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         isMetric = getString(R.string.pref_unit_default_value)
-                .equals(pref.getUnits(getString(R.string.pref_unit_key)));
+                .equals(pref.getUnits(getActivity()));
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         FragmentManager fragmentManager = getChildFragmentManager();

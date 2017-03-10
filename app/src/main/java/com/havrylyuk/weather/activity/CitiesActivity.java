@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
-import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
@@ -42,6 +40,7 @@ import com.havrylyuk.weather.events.ContentChangeEvent;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
 import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
+import com.havrylyuk.weather.util.PreferencesHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,7 +66,7 @@ public class CitiesActivity extends BaseActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        scheduleJob(this);
+        WeatherJobService.scheduleJob(this);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -256,25 +255,6 @@ public class CitiesActivity extends BaseActivity  {
             Log.d(LOG_TAG, "Content Change Event - reload weather data from network");
         }
         updateDataFromNetwork();
-    }
-
-    public  void scheduleJob(Context context) {
-        FirebaseJobDispatcher dispatcher =
-                new FirebaseJobDispatcher(new GooglePlayDriver(context));
-        Job job = dispatcher.newJobBuilder()
-                .setLifetime(Lifetime.FOREVER)
-                .setService(WeatherJobService.class)
-                .setTag("UpdateWeatherJob")
-                .setRecurring(false)
-                //.setTrigger(Trigger.executionWindow(30, 60))
-                .setTrigger(Trigger.executionWindow(60 * 60 * 24, 60 * 60 * 24 + 60)) // Once per hour
-                .setReplaceCurrent(true)
-                .setConstraints(Constraint.ON_ANY_NETWORK)
-                .build();
-        int result = dispatcher.schedule(job);
-        if (result != FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS) {
-            Log.e(LOG_TAG,"Error schedule request :" + result);
-        }
     }
 
     public class SyncContentReceiver extends BroadcastReceiver {

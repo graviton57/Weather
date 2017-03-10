@@ -43,7 +43,7 @@ public class CitiesRecyclerViewAdapter extends RecyclerView.Adapter<CitiesRecycl
         this.context = context;
         PreferencesHelper pref =  PreferencesHelper.getInstance();
         isMetric = context.getString(R.string.pref_unit_default_value)
-                .equals(pref.getUnits(context.getString(R.string.pref_unit_key)));
+                .equals(pref.getUnits(context));
     }
 
     public void setListener(CitiesRecyclerViewItemListener listener) {
