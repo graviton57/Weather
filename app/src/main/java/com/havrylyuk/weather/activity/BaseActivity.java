@@ -65,10 +65,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
         googleApiClient.connect();
     }
 
-    public Location getLastLocation() {
-        return lastLocation;
-    }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -79,7 +75,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
     private void askForPermission(String permission, Integer requestCode) {
         if (ContextCompat.checkSelfPermission(BaseActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(BaseActivity.this, permission)) {
                 ActivityCompat.requestPermissions(BaseActivity.this, new String[]{permission}, requestCode);
             } else {
@@ -144,7 +139,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
                 String currentCity = addresses.get(0).getLocality();
                 String currentAddress = addresses.get(0).getAddressLine(0);
                 if (BuildConfig.DEBUG){
-                Log.d(LOG_TAG, "You current country=" + country+ " region="+region +
+                Log.d(LOG_TAG, "updateCurrentLocation:You current country=" + country+ " region="+region +
                         " cityName=" + currentCity+" Address=" + currentAddress);
                 Log.d(LOG_TAG,"lat="+String.valueOf(location.getLatitude())+"long="+String.valueOf(lastLocation.getLongitude()));
                 }

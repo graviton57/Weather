@@ -25,11 +25,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.jobdispatcher.Constraint;
-import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.havrylyuk.weather.BuildConfig;
 import com.havrylyuk.weather.R;
@@ -41,7 +41,6 @@ import com.havrylyuk.weather.events.ContentChangeEvent;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
 import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
-import com.havrylyuk.weather.util.PreferencesHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,16 +55,18 @@ import java.util.List;
 
 public class CitiesActivity extends BaseActivity  {
 
+    private static final String LOG_TAG = CitiesActivity.class.getSimpleName();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean mTwoPane;
     private CitiesRecyclerViewAdapter mAdapter;
-    private final static String FRAGMENT_TAG = "fragment_tag";
+    private final static String FRAGMENT_TAG = "com.havrylyuk.weather.fragment_tag";
     private SyncContentReceiver syncContentReceiver;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        scheduleJob(this);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -206,9 +207,12 @@ public class CitiesActivity extends BaseActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_about:
-                AboutDialog exitDialog = (AboutDialog) getFragmentManager().findFragmentByTag(AboutDialog.ABOUT_DIALOG_TAG);
+                AboutDialog exitDialog =
+                        (AboutDialog) getFragmentManager().findFragmentByTag(AboutDialog.ABOUT_DIALOG_TAG);
                 if (exitDialog == null) exitDialog = AboutDialog.newInstance();
-                if (!exitDialog.isAdded()) exitDialog.show(getFragmentManager().beginTransaction(), AboutDialog.ABOUT_DIALOG_TAG);
+                if (!exitDialog.isAdded()) {
+                    exitDialog.show(getFragmentManager().beginTransaction(), AboutDialog.ABOUT_DIALOG_TAG);
+                }
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -232,10 +236,10 @@ public class CitiesActivity extends BaseActivity  {
     }
 
     private void updateDataFromNetwork() {
+        if (BuildConfig.DEBUG) Log.d("CitiesActivity","updateDataFromNetwork()");
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
-          Intent intent = new Intent(this, WeatherService.class);
-          startService(intent);
-        //scheduleJob(this);
+         Intent intent = new Intent(this, WeatherService.class);
+         startService(intent);
     }
 
     @Override
@@ -247,47 +251,33 @@ public class CitiesActivity extends BaseActivity  {
 
     @Subscribe
     public void onEvent(ContentChangeEvent event) {
-        if (BuildConfig.DEBUG) Log.d("CitiesActivity", "onEvent reload data from network");
+        if (BuildConfig.DEBUG) Log.d(LOG_TAG, "onEvent reload data from network");
         updateDataFromNetwork();
     }
 
     public static void scheduleJob(Context context) {
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
-        Job job = createJob(dispatcher);
-        int result = dispatcher.schedule(job);
-        if (result != FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS) {
-            Log.e("CitiesActivity","JobDispatcher error:" + result);
-        }
-    }
-
-    public static Job createJob(FirebaseJobDispatcher dispatcher){
+        FirebaseJobDispatcher dispatcher =
+                new FirebaseJobDispatcher(new GooglePlayDriver(context));
         Job job = dispatcher.newJobBuilder()
                 // persist the task across boots
                 .setLifetime(Lifetime.FOREVER)
                 // Call this service when the criteria are met.
                 .setService(WeatherJobService.class)
                 // unique id of the task
-                .setTag("WeatherTimeJob")
+                .setTag("UpdateWeatherJob")
                 // We are mentioning that the job is not periodic.
                 .setRecurring(true)
                 // Run between 30 - 60 seconds from now.
-                .setTrigger(Trigger.executionWindow(5, 10))
+                .setTrigger(Trigger.executionWindow(30, 60))
+                //.setTrigger(Trigger.executionWindow(60*60*24,60*60*24+60)) //one hour
                 //Run this job only when the network is avaiable.
+                .setReplaceCurrent(true)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .build();
-        return job;
-    }
-
-    public static Job updateJob(FirebaseJobDispatcher dispatcher) {
-        Job newJob = dispatcher.newJobBuilder()
-                //update if any task with the given tag exists.
-                .setReplaceCurrent(true)
-                .setService(WeatherJobService.class)
-                .setTag("WeatherTimeJob")
-                // Run between 60 - 120 seconds from now.
-                //.setTrigger(Trigger.executionWindow(60, 120))
-                .build();
-        return newJob;
+        int result = dispatcher.schedule(job);
+        if (result != FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS) {
+            Log.e(LOG_TAG,"JobDispatcher error:" + result);
+        }
     }
 
     public class SyncContentReceiver extends BroadcastReceiver {
@@ -296,7 +286,9 @@ public class CitiesActivity extends BaseActivity  {
         public void onReceive(Context context, Intent intent) {
             boolean sync = intent.getIntExtra(WeatherService.EXTRA_KEY_SYNC, 0) == 1;
             if (!sync) {
-                if (BuildConfig.DEBUG) Toast.makeText(CitiesActivity.this,"Sync complete",Toast.LENGTH_SHORT).show();
+                if (BuildConfig.DEBUG) {
+                    Toast.makeText(CitiesActivity.this,"Sync complete",Toast.LENGTH_SHORT).show();
+                }
                 mSwipeRefreshLayout.setRefreshing(false);
                 loadDataFromDb();
             }
