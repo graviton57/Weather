@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -251,32 +252,28 @@ public class CitiesActivity extends BaseActivity  {
 
     @Subscribe
     public void onEvent(ContentChangeEvent event) {
-        if (BuildConfig.DEBUG) Log.d(LOG_TAG, "onEvent reload data from network");
+        if (BuildConfig.DEBUG) {
+            Log.d(LOG_TAG, "Content Change Event - reload weather data from network");
+        }
         updateDataFromNetwork();
     }
 
-    public static void scheduleJob(Context context) {
+    public  void scheduleJob(Context context) {
         FirebaseJobDispatcher dispatcher =
                 new FirebaseJobDispatcher(new GooglePlayDriver(context));
         Job job = dispatcher.newJobBuilder()
-                // persist the task across boots
                 .setLifetime(Lifetime.FOREVER)
-                // Call this service when the criteria are met.
                 .setService(WeatherJobService.class)
-                // unique id of the task
                 .setTag("UpdateWeatherJob")
-                // We are mentioning that the job is not periodic.
-                .setRecurring(true)
-                // Run between 30 - 60 seconds from now.
-                .setTrigger(Trigger.executionWindow(30, 60))
-                //.setTrigger(Trigger.executionWindow(60*60*24,60*60*24+60)) //one hour
-                //Run this job only when the network is avaiable.
+                .setRecurring(false)
+                //.setTrigger(Trigger.executionWindow(30, 60))
+                .setTrigger(Trigger.executionWindow(60 * 60 * 24, 60 * 60 * 24 + 60)) // Once per hour
                 .setReplaceCurrent(true)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .build();
         int result = dispatcher.schedule(job);
         if (result != FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS) {
-            Log.e(LOG_TAG,"JobDispatcher error:" + result);
+            Log.e(LOG_TAG,"Error schedule request :" + result);
         }
     }
 
