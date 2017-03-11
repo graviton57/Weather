@@ -1,8 +1,5 @@
 package com.havrylyuk.weather.fragment;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.havrylyuk.weather.R;
-import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.adapter.HoursRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.local.LocalDataSource;
-import com.havrylyuk.weather.data.model.Hour;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,8 +47,7 @@ public class DayWeatherFragment extends Fragment  {
         View view = inflater.inflate(R.layout.tabs, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.hour_list);
         setupRecyclerView(recyclerView);
-        //ILocalDataSource localDataSource = LocalDataSource.getInstance(getContext());
-        ILocalDataSource localDataSource = ((WeatherApp) getActivity().getApplicationContext()).getLocalDataSource();
+        ILocalDataSource localDataSource = LocalDataSource.getInstance(getContext());
         addWeathersToList(localDataSource.getForecast(getArguments().getInt(CITY_ID),
                 new Date(getArguments().getLong(DATE))));
 

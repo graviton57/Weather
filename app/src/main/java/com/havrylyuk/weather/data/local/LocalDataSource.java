@@ -14,10 +14,15 @@ import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.greendao.async.AsyncOperation;
+import org.greenrobot.greendao.async.AsyncOperationListener;
+import org.greenrobot.greendao.async.AsyncSession;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -27,14 +32,14 @@ public class LocalDataSource implements ILocalDataSource {
 
     private static final String DB_NAME = "weather.db";
     private static ILocalDataSource INSTANCE;
-    private DaoSession mDaoSession;
+    private DaoSession daoSession;
     private Context context;
 
     private LocalDataSource(Context context) {
+        this.context = context;
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
         DaoMaster daoMaster = new DaoMaster(devOpenHelper.getWritableDatabase());
-        mDaoSession = daoMaster.newSession();
-        this.context = context;
+        daoSession = daoMaster.newSession();
     }
 
     public static ILocalDataSource getInstance(Context context) {
@@ -50,7 +55,7 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     private List<OrmWeather> loadForecastFromDb(int cityId) {
-        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        OrmWeatherDao weatherDao = daoSession.getOrmWeatherDao();
         return weatherDao.queryBuilder()
                 .where(OrmWeatherDao.Properties.City_id.eq(cityId))
                 .build()
@@ -63,7 +68,7 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     private OrmWeather loadSingleForecastFromDb(long cityId) {
-        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        OrmWeatherDao weatherDao = daoSession.getOrmWeatherDao();
         List<OrmWeather> forecast = weatherDao.queryBuilder()
                 .where(OrmWeatherDao.Properties.City_id.eq(cityId))
                 .orderAsc(OrmWeatherDao.Properties.Dt)
@@ -83,7 +88,7 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     private List<OrmWeather> loadForecastFromDb(int cityId, Date date) {
-        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        OrmWeatherDao weatherDao = daoSession.getOrmWeatherDao();
         List<OrmWeather> forecast = weatherDao.queryBuilder()
                 .where(OrmWeatherDao.Properties.Dt.between(getStartOfDayInMillis(date),
                         getEndOfDayInMillis(date)),
@@ -99,16 +104,16 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     private List<OrmCity> loadCityListFromDb() {
-        OrmCityDao cityDao = mDaoSession.getOrmCityDao();
+        OrmCityDao cityDao = daoSession.getOrmCityDao();
         List<OrmCity> cities = cityDao.loadAll();
         if (cities.size() > 0) {
             return cities;
         } else {
-            if (!PreferencesHelper.getInstance().isUseCurrentLocation(context)) {
-            cities.add(new OrmCity((long)2, "Kiev", "Kievska Oblast", "Ukraine", 50.43, 30.52));
-            cities.add(new OrmCity((long)3, "London", "GeoCity of London, Greater London", "United Kingdom", 51.52, -0.11));
-            cities.add(new OrmCity((long)4, "Madrid", "Madrid", "Spain", 40.4, -3.68));
-            saveCities(cities);
+            if (!PreferencesHelper.getInstance().isUseCurrentLocation(context) && BuildConfig.DEBUG) {
+                cities.add(new OrmCity((long) 2, "Kiev", "Kievska Oblast", "Ukraine", 50.43, 30.52));
+                cities.add(new OrmCity((long) 3, "London", "Greater London", "United Kingdom", 51.52, -0.11));
+                cities.add(new OrmCity((long) 4, "Madrid", "Madrid", "Spain", 40.4, -3.68));
+                saveCities(cities);
             }
             return cities;
         }
@@ -136,7 +141,7 @@ public class LocalDataSource implements ILocalDataSource {
 
     @Override
     public void saveCities(List<OrmCity> cities) {
-        OrmCityDao cityDao = mDaoSession.getOrmCityDao();
+        OrmCityDao cityDao = daoSession.getOrmCityDao();
         cityDao.insertInTx(cities);
         if (cities!=null && !cities.isEmpty())
         EventBus.getDefault().post(new ContentChangeEvent(cities.size()));
@@ -144,21 +149,21 @@ public class LocalDataSource implements ILocalDataSource {
 
     @Override
     public void saveCity(OrmCity city) {
-        OrmCityDao cityDao = mDaoSession.getOrmCityDao();
+        OrmCityDao cityDao = daoSession.getOrmCityDao();
         long id = cityDao.insertOrReplace(city);
         EventBus.getDefault().post(new ContentChangeEvent(id));
     }
 
     @Override
     public void refreshAllForecast(List<OrmWeather> forecast) {
-        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        OrmWeatherDao weatherDao = daoSession.getOrmWeatherDao();
         weatherDao.deleteAll();
         weatherDao.insertInTx(forecast);
     }
 
     @Override
     public void refreshForecast(int cityId, List<OrmWeather> forecast) {
-        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        OrmWeatherDao weatherDao = daoSession.getOrmWeatherDao();
         weatherDao.queryBuilder()
                 .where(OrmWeatherDao.Properties.City_id.eq((long) cityId))
                 .buildDelete()
@@ -168,13 +173,13 @@ public class LocalDataSource implements ILocalDataSource {
 
     @Override
     public void deleteAllForecast() {
-        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        OrmWeatherDao weatherDao = daoSession.getOrmWeatherDao();
         weatherDao.deleteAll();
     }
 
     @Override
     public void deleteForecast(long cityId) {
-        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        OrmWeatherDao weatherDao = daoSession.getOrmWeatherDao();
         weatherDao.queryBuilder()
                 .where(OrmWeatherDao.Properties.City_id.eq(cityId))
                 .buildDelete()
@@ -183,14 +188,13 @@ public class LocalDataSource implements ILocalDataSource {
 
     @Override
     public void saveForecast(List<OrmWeather> forecast) {
-        OrmWeatherDao weatherDao = mDaoSession.getOrmWeatherDao();
+        OrmWeatherDao weatherDao = daoSession.getOrmWeatherDao();
         weatherDao.insertInTx(forecast);
     }
 
-
     @Override
     public void deleteCity(OrmCity city) {
-        OrmCityDao cityDao = mDaoSession.getOrmCityDao();
+        OrmCityDao cityDao = daoSession.getOrmCityDao();
         cityDao.delete(city);
     }
 

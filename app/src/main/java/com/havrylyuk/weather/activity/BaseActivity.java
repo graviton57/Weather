@@ -52,7 +52,9 @@ public abstract class BaseActivity extends AppCompatActivity implements
         localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
         setContentView(getLayout());
         if (PreferencesHelper.getInstance().isUseCurrentLocation(this)) {
-            askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, PERMISSIONS_REQUEST_LOCATION);
+            if (savedInstanceState == null) {
+                askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, PERMISSIONS_REQUEST_LOCATION);
+            }
         }
     }
 

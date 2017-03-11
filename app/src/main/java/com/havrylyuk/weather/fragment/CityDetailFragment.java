@@ -48,6 +48,7 @@ public class CityDetailFragment extends Fragment {
     private ILocalDataSource localDataSource;
     private boolean isMetric;
     private PreferencesHelper pref;
+    private long cityId;
 
     public CityDetailFragment() {
 
@@ -68,7 +69,7 @@ public class CityDetailFragment extends Fragment {
         pref = PreferencesHelper.getInstance();
         localDataSource = ((WeatherApp) getActivity().getApplicationContext()).getLocalDataSource();
         if (savedInstanceState != null) {
-            long cityId = getArguments().getLong(ARG_ITEM_ID);
+            cityId = getArguments().getLong(ARG_ITEM_ID);
             openCity((int) cityId);
             localDataSource.getForecast((int) cityId);
         }
