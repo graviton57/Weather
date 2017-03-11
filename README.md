@@ -6,9 +6,12 @@
 
 Weather Android App using apixu API https://www.apixu.com
 
-List of cities and flags from http://www.geonames.org
-
 Icon weather set made by apixu from https://www.apixu.com/api.aspx
+
+Searching cities is supported by more than 200 languages.
+
+List of cities and flags from http://www.geonames.org .
+ 
 
 Main Activity|Detail Activity | Detail list
 -------------|----------------- | -------------
