@@ -1,6 +1,7 @@
 package com.havrylyuk.weather.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,6 +23,7 @@ import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
+import com.havrylyuk.weather.util.LocaleHelper;
 import com.havrylyuk.weather.util.PreferencesHelper;
 
 import java.io.IOException;
@@ -45,6 +47,11 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
 
     protected abstract int getLayout();
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

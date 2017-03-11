@@ -13,7 +13,7 @@
         <item>imperial</item>
     </string-array>
 
-    <string name="pref_unit_default_value" translatable="true">metric</string>
+    <string name="pref_unit_default_value" translatable="false">metric</string>
 
     <string-array name="arr_sync_names">
         <item>@string/pref_item_sync_auto</item>
@@ -34,6 +34,23 @@
         <item>172800</item>
     </string-array>
 
-    <string name="pref_sync_default_value" translatable="true">86400</string>
+    <string name="pref_sync_default_value" translatable="false">86400</string>
 
+    <string-array name="arr_lang_names">
+        <item>@string/pref_item_lang_en</item>
+        <item>@string/pref_item_lang_ru</item>
+        <item>@string/pref_item_lang_uk</item>
+    </string-array>
+
+    <string name="pref_item_lang_en" translatable="false">English</string>
+    <string name="pref_item_lang_ru" translatable="false">Русский</string>
+    <string name="pref_item_lang_uk" translatable="false">Українська</string>
+
+    <string-array  name="arr_lang_values">
+        <item>@string/pref_lang_default_value</item>
+        <item>ru</item>
+        <item>uk</item>
+    </string-array>
+
+    <string name="pref_lang_default_value" translatable="false">en</string>
 </resources>

@@ -37,6 +37,7 @@ import com.havrylyuk.weather.data.model.GeoCity;
 import com.havrylyuk.weather.data.remote.GeoNameApiClient;
 import com.havrylyuk.weather.data.remote.GeoNamesService;
 import com.havrylyuk.weather.service.WeatherService;
+import com.havrylyuk.weather.util.LocaleHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,10 @@ public class AddCityActivity extends AppCompatActivity {
     private ILocalDataSource localDataSource;
     private GeoNamesService service;
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

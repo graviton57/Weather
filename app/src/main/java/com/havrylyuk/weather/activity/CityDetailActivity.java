@@ -1,6 +1,7 @@
 package com.havrylyuk.weather.activity;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.transition.Transition;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
+import com.havrylyuk.weather.util.LocaleHelper;
 
 /**
  *
@@ -24,6 +26,11 @@ public class CityDetailActivity extends AppCompatActivity {
 
     public static final String TRANSITION_NAME = "com.havrylyuk.weather.transition_name";
     public static final String IMAGE_NAME = "com.havrylyuk.weather.image_name";
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

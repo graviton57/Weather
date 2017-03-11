@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
+import com.havrylyuk.weather.util.LocaleHelper;
 
 import java.util.List;
 
@@ -128,6 +129,7 @@ public class SettingsActivity extends AbstractPreferenceActivity implements Shar
             setHasOptionsMenu(true);
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_unit_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sync_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_selected_lang_key)));
         }
 
         @Override
@@ -149,6 +151,12 @@ public class SettingsActivity extends AbstractPreferenceActivity implements Shar
         if (TextUtils.equals(getString(R.string.pref_sync_key), key)) {
             WeatherJobService.scheduleJob(this);
         }
+        if (TextUtils.equals(getString(R.string.pref_selected_lang_key), key)) {
+            String newLang = prefs.getString(getString(R.string.pref_selected_lang_key), "en");
+            LocaleHelper.setLocale(this, newLang);
+            recreate();
+        }
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

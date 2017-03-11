@@ -23,6 +23,12 @@
             android:entryValues="@array/arr_sync_values"
             android:key="@string/pref_sync_key"
             android:title="@string/pref_sync_title" />
+        <ListPreference
+            android:defaultValue="@string/pref_lang_default_value"
+            android:entries="@array/arr_lang_names"
+            android:entryValues="@array/arr_lang_values"
+            android:key="@string/pref_selected_lang_key"
+            android:title="@string/pref_lang_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>

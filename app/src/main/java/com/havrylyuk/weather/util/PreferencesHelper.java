@@ -54,7 +54,6 @@ public class PreferencesHelper {
                 , context.getString(R.string.pref_sync_default_value));
     }
 
-
     public void setUseCurrentLocation(Context context, boolean useLocation){
         editor.putBoolean(context.getString(R.string.pref_use_current_location_key), useLocation);
         editor.apply();
