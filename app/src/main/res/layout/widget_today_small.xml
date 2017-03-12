@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin">
+
+    <FrameLayout
+        android:id="@+id/widget_background"
+        android:background="@drawable/widget_layout"
+        android:alpha="0.5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/widget_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            tools:src="@drawable/ic_clear" />
+
+        <TextView
+            android:id="@+id/widget_high_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/colorLight"
+            tools:text="+12 C" />
+
+        <TextView
+            android:id="@+id/widget_city_name"
+            style="@style/ContentItemTypeStyle"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/colorLight"
+            tools:ignore="RelativeOverlap"
+            tools:text="Chernivtsi" />
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_gravity="end|top"
+        android:layout_width="24dp"
+        android:layout_height="24dp">
+
+        <ImageView
+            android:id="@+id/widget_button_update"
+            android:clickable="true"
+            android:padding="6dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:scaleType="center"
+            android:src="@drawable/refresh"
+            android:contentDescription="@string/image_description" />
+
+        <ProgressBar
+            android:id="@+id/widget_progress_bar"
+            android:padding="6dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+    </FrameLayout>
+</FrameLayout>

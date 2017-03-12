@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    android:minHeight="40dp"
+    android:minWidth="250dp"
+-->
 
 <appwidget-provider
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:initialLayout="@layout/widget_today_large"
-    android:minHeight="40dp"
-    android:minWidth="250dp"
-    android:resizeMode="none"
+    android:minHeight="@dimen/widget_today_default_height"
+    android:minResizeHeight="@dimen/widget_today_min_resize_height"
+    android:minResizeWidth="@dimen/widget_today_min_resize_width"
+    android:minWidth="@dimen/widget_today_default_width"
+    android:resizeMode="horizontal"
     android:previewImage="@drawable/widget_preview_today"
     android:updatePeriodMillis="0"
     tools:ignore="UnusedAttribute" />

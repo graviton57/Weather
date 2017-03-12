@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin">
+
+    <FrameLayout
+        android:id="@+id/widget_background"
+        android:background="@drawable/widget_layout"
+        android:alpha="0.5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/widget_icon"
+            android:layout_width="@dimen/widget_today_min_resize_width"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
+            tools:src="@drawable/ic_clear" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/widget_icon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/widget_max_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/colorLight"
+                tools:text="-1 C" />
+
+            <TextView
+                android:id="@+id/widget_low_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/colorLight"
+                tools:text="+2 C" />
+
+            <TextView
+                android:id="@+id/widget_city_name"
+                style="@style/ContentItemTypeStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/colorLight"
+                tools:text="Chernivtsi" />
+        </LinearLayout>
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_gravity="end|top"
+        android:layout_width="32dp"
+        android:layout_height="32dp">
+
+        <ImageView
+            android:id="@+id/widget_button_update"
+            android:clickable="true"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/refresh"
+            android:contentDescription="@string/image_description" />
+
+        <ProgressBar
+            android:id="@+id/widget_progress_bar"
+            android:padding="6dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+</FrameLayout>

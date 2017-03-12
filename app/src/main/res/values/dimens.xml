@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">360dp</dimen>
+    <dimen name="app_bar_height">340dp</dimen>
     <dimen name="shadow_height">3dp</dimen>
 
     <dimen name="city_image_size">400dp</dimen>
@@ -23,6 +23,12 @@
     <dimen name="image_width">46dp</dimen>
     <dimen name="image_height">46dp</dimen>
     <!-- Today Widget -->
-    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_margin">4dp</dimen>
+    <dimen name="widget_today_default_width">110dp</dimen>
+    <dimen name="widget_today_large_width">250dp</dimen>
+    <dimen name="widget_today_min_resize_width">40dp</dimen>
+    <dimen name="widget_today_default_height">40dp</dimen>
+    <dimen name="widget_today_min_resize_height">@dimen/widget_today_default_height</dimen>
+
 
 </resources>

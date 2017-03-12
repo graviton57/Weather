@@ -1,5 +1,6 @@
 package com.havrylyuk.weather.widget;
 
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -7,8 +8,12 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -70,6 +75,8 @@ public class TodayWidgetIntentService extends IntentService {
             String wind = null;
             String weatherIcon = null;
             String formatTemp = null;
+            String formatTempMax = null;
+            String formatTempMin = null;
             if (ormCity != null) {
                  cityName = ormCity.getCity_name();
                  OrmWeather ormWeather = localDataSource.getSingleForecast(ormCity.get_id());
@@ -79,11 +86,25 @@ public class TodayWidgetIntentService extends IntentService {
                      wind = getString(R.string.format_wind, ormWeather.getWind_speed(),
                              isMetric?"m/s":"mph", ormWeather.getWind_dir());
                      weatherIcon = "http:" + ormWeather.getIcon();
-                    formatTemp = getString(R.string.format_widget_temperature, ormWeather.getTemp(),isMetric?"°C":"°F");
+                     formatTemp = getString(R.string.format_widget_temperature, ormWeather.getTemp(),isMetric?"°C":"°F");
+                     formatTempMax = getString(R.string.format_widget_temperature, ormWeather.getTemp_max(),isMetric?"°C":"°F");
+                     formatTempMin = getString(R.string.format_widget_temperature, ormWeather.getTemp_min(),isMetric?"°C":"°F");
                 }
               }
             for (int appWidgetId : appWidgetIds) {
-                    final RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_today_large);
+                int widgetWidth = getWidgetWidth(appWidgetManager, appWidgetId);
+                int defaultWidth = getResources().getDimensionPixelSize(R.dimen.widget_today_default_width);
+                int largeWidth = getResources().getDimensionPixelSize(R.dimen.widget_today_large_width);
+                int layoutId;
+                if (widgetWidth >= largeWidth) {
+                    layoutId = R.layout.widget_today_large;
+                } else if (widgetWidth >= defaultWidth) {
+                    layoutId = R.layout.widget_today;
+                } else {
+                    layoutId = R.layout.widget_today_small;
+                }
+                final RemoteViews views = new RemoteViews(getPackageName(), layoutId);
+                    //final RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_today_large);
                     views.setViewVisibility(R.id.widget_button_update, sync ? View.GONE : View.VISIBLE);
                     views.setViewVisibility(R.id.widget_progress_bar, sync ? View.VISIBLE : View.GONE);
                     setRemoteContentDescription(views, description);
@@ -92,6 +113,8 @@ public class TodayWidgetIntentService extends IntentService {
                     if (cityName!=null) views.setTextViewText(R.id.widget_city_name, cityName);
                     if (date!=null) views.setTextViewText(R.id.widget_weather_date, date);
                     if (formatTemp!=null) views.setTextViewText(R.id.widget_high_temperature, formatTemp);
+                    if (formatTempMax!=null) views.setTextViewText(R.id.widget_max_temperature, formatTempMin);
+                    if (formatTempMin!=null) views.setTextViewText(R.id.widget_low_temperature, formatTempMin);
                     if (weatherIcon != null) loadWeatherIcon(appWidgetManager, appWidgetId, views, weatherIcon);
                     // Create an Intent to launch CitiesActivity
                     Intent launchIntent = new Intent(this, CitiesActivity.class);
@@ -147,4 +170,19 @@ public class TodayWidgetIntentService extends IntentService {
         views.setContentDescription(R.id.widget_icon, description);
     }
 
+    private int getWidgetWidth(AppWidgetManager appWidgetManager, int appWidgetId) {
+        return getWidgetWidthFromOptions(appWidgetManager, appWidgetId);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private int getWidgetWidthFromOptions(AppWidgetManager appWidgetManager, int appWidgetId) {
+        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+        if (options.containsKey(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)) {
+            int minWidthDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, minWidthDp,
+                    displayMetrics);
+        }
+        return  getResources().getDimensionPixelSize(R.dimen.widget_today_default_width);
+    }
 }
