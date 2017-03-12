@@ -32,7 +32,7 @@ import java.util.List;
  *
  *  Created by Igor Havrylyuk on 05.03.2017.
  */
-public class SettingsActivity extends AbstractPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsActivity extends BasePreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPrefs;
 

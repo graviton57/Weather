@@ -1,6 +1,5 @@
 package com.havrylyuk.weather.activity;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -13,15 +12,13 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.havrylyuk.weather.util.LocaleHelper;
-
 /**
  *
  *  Created by Igor Havrylyuk on 05.03.2017.
  */
-public abstract class AbstractPreferenceActivity extends PreferenceActivity {
+public abstract class BasePreferenceActivity extends PreferenceActivity {
 
-    private AppCompatDelegate mDelegate;
+    private AppCompatDelegate delegate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +101,9 @@ public abstract class AbstractPreferenceActivity extends PreferenceActivity {
     }
 
     private AppCompatDelegate getDelegate() {
-        if (mDelegate == null) {
-            mDelegate = AppCompatDelegate.create(this, null);
+        if (delegate == null) {
+            delegate = AppCompatDelegate.create(this, null);
         }
-        return mDelegate;
+        return delegate;
     }
 }

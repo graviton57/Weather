@@ -46,7 +46,7 @@ import java.util.List;
  * Created by Igor Havrylyuk on 16.02.2017.
  */
 
-public class CitiesActivity extends BaseActivity  {
+public class CitiesActivity extends PermissionActivity {
 
     private static final String LOG_TAG = CitiesActivity.class.getSimpleName();
     private SwipeRefreshLayout mSwipeRefreshLayout;

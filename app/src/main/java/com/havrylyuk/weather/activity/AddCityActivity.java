@@ -4,10 +4,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,13 +29,10 @@ import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.adapter.AddCityRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
-import com.havrylyuk.weather.data.local.LocalDataSource;
 import com.havrylyuk.weather.data.model.GeoCities;
 import com.havrylyuk.weather.data.model.GeoCity;
 import com.havrylyuk.weather.data.remote.GeoNameApiClient;
 import com.havrylyuk.weather.data.remote.GeoNamesService;
-import com.havrylyuk.weather.service.WeatherService;
-import com.havrylyuk.weather.util.LocaleHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +46,7 @@ import retrofit2.Response;
  *
  * Created by Igor Havrylyuk on 16.02.2017.
  */
-public class AddCityActivity extends AppCompatActivity {
+public class AddCityActivity extends BaseActivity {
 
     private static final String LOG_TAG = AddCityActivity.class.getSimpleName();
     private static final int MAX_CITIES_LIST_SIZE = 16;
@@ -70,14 +65,13 @@ public class AddCityActivity extends AppCompatActivity {
     private GeoNamesService service;
 
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
+    protected int getLayout() {
+        return R.layout.activity_add_city;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_city);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -158,23 +152,26 @@ public class AddCityActivity extends AppCompatActivity {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
             searchView.clearFocus();
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    searchQuery = query;
-                    searchView.clearFocus();
-                    updateData();
-                    return true;
-                }
-                @Override
-                public boolean onQueryTextChange(String query) {
-                    searchQuery = query;
-                    updateData();
-                    return true;
-                }
-            });
+            searchView.setOnQueryTextListener(onQueryTextListener);
         }
     }
+
+    private  SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            searchQuery = query;
+            searchView.clearFocus();
+            updateData();
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String query) {
+            searchQuery = query;
+            updateData();
+            return true;
+        }
+    };
 
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -275,7 +272,6 @@ public class AddCityActivity extends AppCompatActivity {
                 mSearchState.setVisibility(View.GONE);
             }
         }
-
     }
 
     private void showCouldNotFindCity() {

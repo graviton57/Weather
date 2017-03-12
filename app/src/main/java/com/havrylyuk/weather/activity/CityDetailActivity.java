@@ -1,13 +1,11 @@
 package com.havrylyuk.weather.activity;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -16,26 +14,24 @@ import android.transition.Transition;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
-import com.havrylyuk.weather.util.LocaleHelper;
 
 /**
  *
  * Created by Igor Havrylyuk on 17.02.2017.
  */
-public class CityDetailActivity extends AppCompatActivity {
+public class CityDetailActivity extends BaseActivity {
 
     public static final String TRANSITION_NAME = "com.havrylyuk.weather.transition_name";
     public static final String IMAGE_NAME = "com.havrylyuk.weather.image_name";
 
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
+    protected int getLayout() {
+        return R.layout.activity_city_detail;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
