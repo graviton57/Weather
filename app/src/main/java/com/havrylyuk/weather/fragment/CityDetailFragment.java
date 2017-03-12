@@ -87,6 +87,7 @@ public class CityDetailFragment extends Fragment {
             setHumidity(current.getHumidity());
             setWindSpeed(current.getWind_speed(), current.getWind_dir());
             setPressure(current.getPressure());
+            setCondition(current.getCondition_text());
             setDate(current.getDt());
             setImage(Utility.getImageWithForecast(current.getCondition_code(),current.getIs_day()));
             addDaysToViewPager(forecasts);
@@ -235,6 +236,13 @@ public class CityDetailFragment extends Fragment {
             Resources res = getResources();
             String pressureText = res.getString(R.string.format_pressure, pressure, isMetric ? "mmHg." : "psi");
             view.setText(pressureText);
+        }
+    }
+
+    public void setCondition(String condition) {
+        TextView view = (TextView) getActivity().findViewById(R.id.header_condition);
+        if (view != null) {
+            view.setText(condition);
         }
     }
 

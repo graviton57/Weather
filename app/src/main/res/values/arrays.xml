@@ -5,8 +5,8 @@
         <item>@string/pref_item_unit_imperial</item>
     </string-array>
 
-    <string name="pref_item_unit_imperial">Imperial</string>
-    <string name="pref_item_unit_metric">Metric</string>
+    <string name="pref_item_unit_imperial">Imperial (°F, mph, psi)</string>
+    <string name="pref_item_unit_metric">Metric (°C, m/s, mmHg.)</string>
 
     <string-array  name="arr_units_values">
         <item>metric</item>

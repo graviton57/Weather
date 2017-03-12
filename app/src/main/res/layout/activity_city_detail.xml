@@ -101,6 +101,20 @@
                     tools:ignore="InconsistentLayout" />
 
                 <TextView
+                    android:id="@+id/header_condition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/colorLight"
+                    android:textSize="22sp"
+                    android:layout_marginLeft="@dimen/primary_text_margin"
+                    android:layout_marginRight="@dimen/primary_text_margin"
+                    android:layout_marginBottom="@dimen/subtext_size_bottom_padding"
+                    android:layout_below="@+id/header_pressure"
+                    android:layout_alignParentRight="true"
+                    tools:ignore="InconsistentLayout" />
+
+                <TextView
                     android:id="@+id/header_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
