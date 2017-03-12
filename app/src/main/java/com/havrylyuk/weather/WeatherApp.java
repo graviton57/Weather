@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.havrylyuk.weather.data.FileManager;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.local.LocalDataSource;
 import com.havrylyuk.weather.util.LocaleHelper;

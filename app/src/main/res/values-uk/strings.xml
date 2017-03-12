@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/tools">
+    <string name="app_name">Weather</string>
+    <string name="about">Про додаток</string>
+    <string name="action_search">Пошук</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="city_caption">Місто:</string>
+    <string name="could_not_find_a_city">Не вдалося знайти місто. Спробуйте інше.</string>
+    <string name="country_caption">Країна:</string>
+    <string name="error">Помика</string>
+    <string name="failed_to_load_weather">Не вдалося завантажити прогноз</string>
+    <string name="format_humidity">Вологість: %d%%</string>
+    <string name="format_humidity_hourly">%d%% волог.</string>
+    <string name="format_pressure">Тиск: %.0f <xliff:g id="pressure">%2$s</xliff:g></string>
+    <string name="title_widget_today">Прогноз на сьогодні</string>
+    <string name="pref_header_general">Основні</string>
+    <string name="pref_item_sync_30min">Кожні 30 хвилин</string>
+    <string name="pref_item_sync_auto">Автоматично</string>
+    <string name="pref_item_sync_hourly">Кожну годину</string>
+    <string name="pref_item_sync_two_hours">Кожні 2 години</string>
+    <string name="pref_item_unit_metric">Метрична</string>
+    <string name="pref_lang_title">Мова</string>
+    <string name="pref_sync_title">Період оновлення</string>
+    <string name="select_city">Щоб подивитись погоду веберіть місто</string>
+    <string name="temperature_minus">Температура: %.1f <xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="temperature_plus">Температура: +%.1f <xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="start_typing">Введіть назву міста</string>
+    <string name="pref_unit_title">Одиниці вимиру</string>
+    <string name="pref_enable_location_summary">Погода для поточного розташування</string>
+    <string name="pref_enable_location_title">Поточне розташування</string>
+    <string name="pref_item_unit_imperial">Імперська</string>
+    <string name="format_wind">Вітер:<xliff:g id="speed">1%.0f</xliff:g> <xliff:g id="unit">%2$s</xliff:g>, <xliff:g id="dir">%3$s</xliff:g></string>
+</resources>

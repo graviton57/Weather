@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/tools">
+    <string name="app_name">Weather</string>
+    <string name="about">О программе</string>
+    <string name="action_search">Поиск</string>
+    <string name="action_settings">Настройки</string>
+    <string name="city_caption">Город:</string>
+    <string name="could_not_find_a_city">Не удалось найти город</string>
+    <string name="country_caption">Страна:</string>
+    <string name="error">Ошибка</string>
+    <string name="failed_to_load_weather">Не удалось загрузить прогноз погоды</string>
+    <string name="format_humidity">Влажность: %d%%</string>
+    <string name="format_humidity_hourly">%d%% влаж.</string>
+    <string name="format_pressure">Давление: %.0f <xliff:g id="pressure">%2$s</xliff:g></string>
+    <string name="pref_enable_location_summary">Погода для текущего местоположения</string>
+    <string name="pref_enable_location_title">Текущее местоположение</string>
+    <string name="pref_header_general">Основные</string>
+    <string name="pref_item_sync_30min">Каждые 30 минут</string>
+    <string name="pref_item_sync_auto">Автоматически</string>
+    <string name="pref_item_sync_hourly">Раз в час</string>
+    <string name="pref_item_sync_two_hours">Раз в 2 часа</string>
+    <string name="pref_item_unit_imperial">Английская</string>
+    <string name="pref_item_unit_metric">Метрическая</string>
+    <string name="pref_lang_title">Язык</string>
+    <string name="pref_unit_title">Еденицы измерения</string>
+    <string name="select_city">Чтобы увидеть погоду выберитет город</string>
+    <string name="start_typing">Введите названия города</string>
+    <string name="temperature_minus">Температура: %.1f <xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="temperature_plus">Температура: +%.1f <xliff:g id="unit">%2$s</xliff:g></string>
+    <string name="title_widget_today">Прогноз на сегодня</string>
+    <string name="pref_sync_title">Период обновления</string>
+    <string name="format_wind">Ветер:<xliff:g id="speed">1%.0f</xliff:g> <xliff:g id="unit">%2$s</xliff:g>, <xliff:g id="dir">%3$s</xliff:g></string>
+</resources>

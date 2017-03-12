@@ -5,15 +5,20 @@
     android:id="@+id/widget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_layout"
-    android:alpha="0.9"
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
     android:paddingRight="8dp"
     android:paddingLeft="8dp">
 
     <FrameLayout
-        android:layout_gravity="end|bottom"
+        android:id="@+id/widget_background"
+        android:background="@drawable/widget_layout"
+        android:alpha="0.5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+    <FrameLayout
+        android:layout_gravity="end|top"
         android:layout_width="32dp"
         android:layout_height="32dp">
 
@@ -23,9 +28,11 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:scaleType="centerInside"
-            android:src="@drawable/refresh" />
+            android:src="@drawable/refresh"
+            android:contentDescription="@string/image_description" />
         <ProgressBar
             android:id="@+id/widget_progress_bar"
+            android:padding="6dp"
             android:indeterminate="true"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -71,6 +78,7 @@
                 android:id="@+id/widget_wind"
                 tools:text="Wind 12 m/s, NW"
                 android:textColor="@color/colorLight"
+                android:fontFamily="sans-serif-condensed"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center_horizontal"
-                android:textAppearance="?android:textAppearanceMedium"
+                android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/colorLight"
                 tools:text="Clear " />
 

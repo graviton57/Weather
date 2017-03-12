@@ -28,8 +28,10 @@ import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.activity.CitiesActivity;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmWeather;
+import com.havrylyuk.weather.data.FileManager;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.service.WeatherService;
+import com.havrylyuk.weather.util.LocaleHelper;
 import com.havrylyuk.weather.util.PreferencesHelper;
 
 import java.text.SimpleDateFormat;
@@ -58,7 +60,6 @@ public class TodayWidgetIntentService extends IntentService {
                 .equals(pref.getUnits(this));
         if (intent != null  ) {
             boolean sync = intent.getIntExtra(WeatherService.EXTRA_KEY_SYNC, 0) == 1;
-            Log.d(LOG_TAG, "onHandleIntent action update show progress sync=" + sync);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
                     TodayWidgetProvider.class));
@@ -75,14 +76,14 @@ public class TodayWidgetIntentService extends IntentService {
                  cityName = ormCity.getCity_name();
                  OrmWeather ormWeather = localDataSource.getSingleForecast(ormCity.get_id());
                 if (ormWeather != null) {
-                     description = ormWeather.getCondition_text();
+                     description = getCondition(ormWeather);
                      date = format.format(ormWeather.getDt());
                      wind = getString(R.string.format_wind, ormWeather.getWind_speed(),
                              isMetric?"m/s":"mph", ormWeather.getWind_dir());
                      weatherIcon = "http:" + ormWeather.getIcon();
                     formatTemp = getString(R.string.format_widget_temperature, ormWeather.getTemp(),isMetric?"°C":"°F");
-                } else Log.d(LOG_TAG,"ormWeather = Null!");
-              }  else Log.d(LOG_TAG,"ormCity = Null!");
+                }
+              }
             for (int appWidgetId : appWidgetIds) {
                     final RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_today_large);
                     Log.d(LOG_TAG,"views.setViewVisibility show progress sync="+sync);
@@ -149,5 +150,15 @@ public class TodayWidgetIntentService extends IntentService {
 
     private void setRemoteContentDescription(RemoteViews views, String description) {
         views.setContentDescription(R.id.widget_icon, description);
+    }
+
+    private String getCondition(OrmWeather ormWeather) {
+        String lang = LocaleHelper.getLanguage(this);
+        String localizedMessage = FileManager.getInstance(this.getAssets())
+                .getCondition(ormWeather.getCondition_code(), lang);
+        if (localizedMessage == null) {
+            localizedMessage = ormWeather.getCondition_text();
+        }
+        return localizedMessage;
     }
 }
