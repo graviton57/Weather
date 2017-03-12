@@ -9,20 +9,15 @@ import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmCityDao;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.dao.OrmWeatherDao;
-import com.havrylyuk.weather.events.ContentChangeEvent;
+import com.havrylyuk.weather.events.WeatherEvent;
 import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.greendao.async.AsyncOperation;
-import org.greenrobot.greendao.async.AsyncOperationListener;
-import org.greenrobot.greendao.async.AsyncSession;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -143,15 +138,17 @@ public class LocalDataSource implements ILocalDataSource {
     public void saveCities(List<OrmCity> cities) {
         OrmCityDao cityDao = daoSession.getOrmCityDao();
         cityDao.insertInTx(cities);
-        if (cities!=null && !cities.isEmpty())
-        EventBus.getDefault().post(new ContentChangeEvent(cities.size()));
+        if (cities!=null && !cities.isEmpty()){
+            EventBus.getDefault().post(new WeatherEvent(WeatherEvent.CHANGE_CONTENT));
+        }
+
     }
 
     @Override
     public void saveCity(OrmCity city) {
         OrmCityDao cityDao = daoSession.getOrmCityDao();
-        long id = cityDao.insertOrReplace(city);
-        EventBus.getDefault().post(new ContentChangeEvent(id));
+        cityDao.insertOrReplace(city);
+        EventBus.getDefault().post(new WeatherEvent(WeatherEvent.CHANGE_CONTENT));
     }
 
     @Override

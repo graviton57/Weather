@@ -19,9 +19,12 @@ import android.view.MenuItem;
 
 
 import com.havrylyuk.weather.R;
+import com.havrylyuk.weather.events.WeatherEvent;
 import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
 import com.havrylyuk.weather.util.LocaleHelper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -63,6 +66,11 @@ public class SettingsActivity extends AbstractPreferenceActivity implements Shar
         sBindPrefSummaryToValueListener.onPreferenceChange(preference,
                 PreferenceManager.getDefaultSharedPreferences(preference.getContext())
                                 .getString(preference.getKey(), ""));
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override
@@ -154,6 +162,7 @@ public class SettingsActivity extends AbstractPreferenceActivity implements Shar
         if (TextUtils.equals(getString(R.string.pref_selected_lang_key), key)) {
             String newLang = prefs.getString(getString(R.string.pref_selected_lang_key), "en");
             LocaleHelper.setLocale(this, newLang);
+            EventBus.getDefault().post(new WeatherEvent(WeatherEvent.CHANGE_LANGUAGE));
             recreate();
         }
 

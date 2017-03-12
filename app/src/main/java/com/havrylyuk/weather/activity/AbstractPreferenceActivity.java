@@ -24,11 +24,6 @@ public abstract class AbstractPreferenceActivity extends PreferenceActivity {
     private AppCompatDelegate mDelegate;
 
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);

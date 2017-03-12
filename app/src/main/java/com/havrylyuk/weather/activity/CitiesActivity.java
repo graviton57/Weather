@@ -30,7 +30,7 @@ import com.havrylyuk.weather.adapter.CitiesRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.model.CityWithWeather;
 import com.havrylyuk.weather.dialog.AboutDialog;
-import com.havrylyuk.weather.events.ContentChangeEvent;
+import com.havrylyuk.weather.events.WeatherEvent;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
 import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
@@ -245,11 +245,16 @@ public class CitiesActivity extends BaseActivity  {
     }
 
     @Subscribe
-    public void onEvent(ContentChangeEvent event) {
-        if (BuildConfig.DEBUG) {
-            Log.d(LOG_TAG, "Content Change Event - reload weather data from network");
+    public void onEvent(WeatherEvent event) {
+        switch (event.getEventId()) {
+            case WeatherEvent.CHANGE_CONTENT:
+                if (BuildConfig.DEBUG)  Log.d(LOG_TAG, "Content Change Event - reload weather data from network");
+                updateDataFromNetwork();
+                break;
+            case WeatherEvent.CHANGE_LANGUAGE:
+                recreate();
+                break;
         }
-        updateDataFromNetwork();
     }
 
     public class SyncContentReceiver extends BroadcastReceiver {
