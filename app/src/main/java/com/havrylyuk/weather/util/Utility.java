@@ -134,4 +134,19 @@ public class Utility {
         }
     }
 
+    public static double toFahrenheit(double celsius) {
+        return 9 * (celsius / 5) + 32;
+    }
+
+    public static double toCelsius(double fahrenheit) {
+        return (fahrenheit - 32) * 5 / 9;
+    }
+
+    public static double toMilesPerHour(double kmPerHour) {
+        return kmPerHour * 0.62137119;
+    }
+
+    public static double toKmPerHour(double milesPerHour) {
+        return milesPerHour * 1.609344;
+    }
 }
