@@ -24,21 +24,23 @@
         android:textSize="@dimen/subtext_size" />
 
     <FrameLayout
-        android:gravity="center"
-        android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:layout_weight="0.7">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:gravity="center">
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/weather_state"
+            android:layout_width="64dp"
+            android:layout_gravity="center"
+            android:layout_height="64dp"
             android:contentDescription="@string/image_description"
             fresco:actualImageScaleType="fitCenter"
             fresco:fadeDuration="300"
-            fresco:progressBarImage="@drawable/loading"
             fresco:progressBarAutoRotateInterval="1000"
+            fresco:progressBarImage="@drawable/loading"
             fresco:progressBarImageScaleType="centerInside"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            tools:src="@drawable/city" />
+            tools:src="@drawable/ua" />
     </FrameLayout>
 
 

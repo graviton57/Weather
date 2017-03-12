@@ -2,6 +2,7 @@ package com.havrylyuk.weather.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmWeather;
+import com.havrylyuk.weather.data.FileManager;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.model.Current;
 import com.havrylyuk.weather.data.model.ForecastDay;
@@ -17,6 +19,7 @@ import com.havrylyuk.weather.data.model.ForecastWeather;
 import com.havrylyuk.weather.data.model.Hour;
 import com.havrylyuk.weather.data.remote.WeatherApiClient;
 import com.havrylyuk.weather.data.remote.OpenWeatherService;
+import com.havrylyuk.weather.util.LocaleHelper;
 import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
@@ -48,25 +51,26 @@ public class WeatherService extends IntentService {
     private static final int END_SYNC = 2;
     private static final int ERROR_SYNC = 0;
 
-
-
     private ILocalDataSource localDataSource;
     private final SimpleDateFormat fmt;
     private boolean isMetric;
+    private FileManager fileManager;
+    private String selectedLang;
 
     public WeatherService() {
         super("WeatherService");
         fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null ) {
+            if (BuildConfig.DEBUG) Log.d(LOG_TAG, " Beginning network data synchronization ");
             PreferencesHelper pref = PreferencesHelper.getInstance();
+            selectedLang = LocaleHelper.getLanguage(getApplicationContext());
+            fileManager = FileManager.getInstance(getAssets());
             isMetric = getString(R.string.pref_unit_default_value)
                     .equals(pref.getUnits(this));
-            if (BuildConfig.DEBUG) Log.d(LOG_TAG, " Beginning network data synchronization ");
             updateSyncStatus(START_SYNC);
             if (Utility.isNetworkAvailable(getApplicationContext())) {
                 localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
@@ -123,7 +127,11 @@ public class WeatherService extends IntentService {
         weather.setTemp(isMetric?current.getTempC():current.getTempF());
         weather.setIs_day(current.getIs_day()==1);
         weather.setIcon(current.getCondition().getIcon());
-        weather.setCondition_text(current.getCondition().getText());
+        String localizedCondition =  fileManager.getCondition(current.getCondition().getCode(), selectedLang);
+        if (TextUtils.isEmpty(localizedCondition)) {
+            localizedCondition = current.getCondition().getText();
+        }
+        weather.setCondition_text(localizedCondition);
         weather.setCondition_code(current.getCondition().getCode());
         weather.setWind_speed(isMetric ? convertKphToMps(current.getWindKph()) : current.getWindMph());
         weather.setWind_dir(response.getCurrent().getWindDir());
@@ -149,7 +157,11 @@ public class WeatherService extends IntentService {
                     weather.setWind_dir(hour.getWindDir());
                     weather.setRain(hour.getWillItRain());
                     weather.setSnow(hour.getWillItSnow());
-                    weather.setCondition_text(hour.getCondition().getText());
+                    String localizedCondition =  fileManager.getCondition(hour.getCondition().getCode(), selectedLang);
+                    if (TextUtils.isEmpty(localizedCondition)) {
+                        localizedCondition = hour.getCondition().getText();
+                    }
+                    weather.setCondition_text(localizedCondition);
                     weather.setCondition_code(hour.getCondition().getCode());
                     weather.setIs_day(hour.getIs_day()==1);
                     ormWeatherList.add(weather);

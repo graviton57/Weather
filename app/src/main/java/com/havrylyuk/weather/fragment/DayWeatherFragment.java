@@ -12,10 +12,8 @@ import android.widget.Toast;
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.adapter.HoursRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmWeather;
-import com.havrylyuk.weather.data.FileManager;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.data.local.LocalDataSource;
-import com.havrylyuk.weather.util.LocaleHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,13 +59,7 @@ public class DayWeatherFragment extends Fragment  {
         mAdapter.setListener(new HoursRecyclerViewAdapter.OnIconClickListener() {
             @Override
             public void onIconClick(OrmWeather weather, View view) {
-                String lang = LocaleHelper.getLanguage(getContext());
-                String localizedMessage = FileManager.getInstance(getActivity().getAssets())
-                        .getCondition(weather.getCondition_code(), lang);
-                if (localizedMessage == null) {
-                     localizedMessage = weather.getCondition_text();
-                }
-                Toast.makeText(getActivity(),localizedMessage,Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),weather.getCondition_text(),Toast.LENGTH_LONG).show();
             }
         });
         recyclerView.setAdapter(mAdapter);

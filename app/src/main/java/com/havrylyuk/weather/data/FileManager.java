@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 
 
 /**
+ *
  * Created by Igor Havrylyuk on 12.03.2017.
  */
 
@@ -21,11 +22,11 @@ public class FileManager implements FileSource {
 
     private static final String LOG_TAG = FileManager.class.getSimpleName();
     private static FileManager INSTANCE;
-    private AssetManager assetManager;
+    private JSONArray conditions;
     private final static String FILE_NAME = "conditions.json";
 
     private FileManager(AssetManager assetManager) {
-        this.assetManager = assetManager;
+        this.conditions = getConditionFromFile(assetManager);
     }
 
     public static FileManager getInstance(AssetManager assetManager) {
@@ -38,10 +39,9 @@ public class FileManager implements FileSource {
     @Override
     public String getCondition(int code, String lang) {
         String result = null;
-        JSONArray jConditions = getConditionFromFile(assetManager);
-        for (int i = 0; jConditions != null && i < jConditions.length(); i++) {
+        for (int i = 0; conditions != null && i < conditions.length(); i++) {
             try {
-                JSONObject jCondition = jConditions.getJSONObject(i);
+                JSONObject jCondition = conditions.getJSONObject(i);
                 if (jCondition.getInt("code") == code) {
                     JSONArray jLanguages = jCondition.getJSONArray("languages");
                     for (int j = 0; jLanguages != null && j < jLanguages.length(); j++) {
@@ -69,8 +69,7 @@ public class FileManager implements FileSource {
             while ((line = r.readLine()) != null) {
                 total.append(line).append('\n');
             }
-            JSONArray jsonArray = new JSONArray(total.toString());
-            return jsonArray;
+            return new JSONArray(total.toString());
         } catch(IOException e) {
             Log.e(LOG_TAG, "Unable to read conditions json file, " + e);
         } catch(JSONException e) {

@@ -28,10 +28,8 @@ import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.activity.CitiesActivity;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmWeather;
-import com.havrylyuk.weather.data.FileManager;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
 import com.havrylyuk.weather.service.WeatherService;
-import com.havrylyuk.weather.util.LocaleHelper;
 import com.havrylyuk.weather.util.PreferencesHelper;
 
 import java.text.SimpleDateFormat;
@@ -76,7 +74,7 @@ public class TodayWidgetIntentService extends IntentService {
                  cityName = ormCity.getCity_name();
                  OrmWeather ormWeather = localDataSource.getSingleForecast(ormCity.get_id());
                 if (ormWeather != null) {
-                     description = getCondition(ormWeather);
+                     description = ormWeather.getCondition_text();
                      date = format.format(ormWeather.getDt());
                      wind = getString(R.string.format_wind, ormWeather.getWind_speed(),
                              isMetric?"m/s":"mph", ormWeather.getWind_dir());
@@ -86,9 +84,6 @@ public class TodayWidgetIntentService extends IntentService {
               }
             for (int appWidgetId : appWidgetIds) {
                     final RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_today_large);
-                    Log.d(LOG_TAG,"views.setViewVisibility show progress sync="+sync);
-                    Log.d(LOG_TAG, "City=" + cityName + " Temp=" + formatTemp +
-                        " icon=" + weatherIcon + " desc=" + description+" date=" + date);
                     views.setViewVisibility(R.id.widget_button_update, sync ? View.GONE : View.VISIBLE);
                     views.setViewVisibility(R.id.widget_progress_bar, sync ? View.VISIBLE : View.GONE);
                     setRemoteContentDescription(views, description);
@@ -152,13 +147,4 @@ public class TodayWidgetIntentService extends IntentService {
         views.setContentDescription(R.id.widget_icon, description);
     }
 
-    private String getCondition(OrmWeather ormWeather) {
-        String lang = LocaleHelper.getLanguage(this);
-        String localizedMessage = FileManager.getInstance(this.getAssets())
-                .getCondition(ormWeather.getCondition_code(), lang);
-        if (localizedMessage == null) {
-            localizedMessage = ormWeather.getCondition_text();
-        }
-        return localizedMessage;
-    }
 }

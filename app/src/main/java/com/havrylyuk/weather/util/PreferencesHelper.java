@@ -54,6 +54,7 @@ public class PreferencesHelper {
                 , context.getString(R.string.pref_sync_default_value));
     }
 
+
     public void setUseCurrentLocation(Context context, boolean useLocation){
         editor.putBoolean(context.getString(R.string.pref_use_current_location_key), useLocation);
         editor.apply();
@@ -63,5 +64,8 @@ public class PreferencesHelper {
         return sharedPreferences.getBoolean(context.getString(R.string.pref_use_current_location_key), true);
     }
 
+    public String getSelectedLang(Context context , String defaultLanguage){
+        return sharedPreferences.getString(context.getString(R.string.pref_selected_lang_key), defaultLanguage);
+    }
 
 }
