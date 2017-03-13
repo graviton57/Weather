@@ -30,4 +30,5 @@
     <string name="pref_enable_location_title">Поточне розташування</string>
     <string name="pref_item_unit_imperial">Імперська</string>
     <string name="format_wind">Вітер:<xliff:g id="speed">1%.0f</xliff:g> <xliff:g id="unit">%2$s</xliff:g>, <xliff:g id="dir">%3$s</xliff:g></string>
+    <string name="error_load_data">Упс... Сталась пригода!</string>
 </resources>

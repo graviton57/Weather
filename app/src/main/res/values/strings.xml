@@ -19,6 +19,7 @@
     <string name="no_internet" translatable="false">No Internet connection available…</string>
     <string name="image_description" translatable="false">Image</string>
     <string name="error">Error</string>
+    <string name="error_load_data">Oops… Something went wrong</string>
     <string name="failed_to_load_weather">Failed to load weather</string>
     <string name="city_caption">City: </string>
     <string name="country_caption">Country: </string>

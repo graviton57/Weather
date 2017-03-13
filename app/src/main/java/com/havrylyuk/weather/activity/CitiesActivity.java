@@ -1,10 +1,7 @@
 package com.havrylyuk.weather.activity;
 
 import android.app.ActivityOptions;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +27,7 @@ import com.havrylyuk.weather.adapter.CitiesRecyclerViewAdapter;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.model.CityWithWeather;
 import com.havrylyuk.weather.dialog.AboutDialog;
+import com.havrylyuk.weather.events.LoadingStatusEvent;
 import com.havrylyuk.weather.events.WeatherEvent;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
 import com.havrylyuk.weather.service.WeatherJobService;
@@ -37,6 +35,7 @@ import com.havrylyuk.weather.service.WeatherService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +52,6 @@ public class CitiesActivity extends PermissionActivity {
     private boolean mTwoPane;
     private CitiesRecyclerViewAdapter mAdapter;
     private final static String FRAGMENT_TAG = "com.havrylyuk.weather.fragment_tag";
-    private SyncContentReceiver syncContentReceiver;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +62,6 @@ public class CitiesActivity extends PermissionActivity {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        IntentFilter filter = new IntentFilter(WeatherService.ACTION_DATA_UPDATED);
-        syncContentReceiver = new SyncContentReceiver();
-        registerReceiver(syncContentReceiver, filter);
         setupToolbar();
         setupFabButton();
         if (findViewById(R.id.city_detail_container) != null) {
@@ -239,9 +233,32 @@ public class CitiesActivity extends PermissionActivity {
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(syncContentReceiver);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(LoadingStatusEvent event) {
+        switch (event.getStatus()) {
+            case WeatherService.SYNC_START:
+                if (BuildConfig.DEBUG) {
+                    Toast.makeText(CitiesActivity.this,"Sync start",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case WeatherService.SYNC_END:
+                if (BuildConfig.DEBUG) {
+                    Toast.makeText(CitiesActivity.this,"Sync complete",Toast.LENGTH_SHORT).show();
+                }
+                if (mSwipeRefreshLayout!=null) mSwipeRefreshLayout.setRefreshing(false);
+                loadDataFromDb();
+                break;
+            case WeatherService.SYNC_NO_INTERNET:
+                    Toast.makeText(CitiesActivity.this,getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
+                break;
+            case WeatherService.SYNC_ERROR:
+                    Toast.makeText(CitiesActivity.this, getString(R.string.error_load_data), Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Subscribe
@@ -254,21 +271,6 @@ public class CitiesActivity extends PermissionActivity {
             case WeatherEvent.CHANGE_LANGUAGE:
                 recreate();
                 break;
-        }
-    }
-
-    public class SyncContentReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean sync = intent.getIntExtra(WeatherService.EXTRA_KEY_SYNC, 0) == 1;
-            if (!sync) {
-                if (BuildConfig.DEBUG) {
-                    Toast.makeText(CitiesActivity.this,"Sync complete",Toast.LENGTH_SHORT).show();
-                }
-                mSwipeRefreshLayout.setRefreshing(false);
-                loadDataFromDb();
-            }
         }
     }
 

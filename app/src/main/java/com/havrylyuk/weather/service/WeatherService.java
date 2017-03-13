@@ -19,9 +19,12 @@ import com.havrylyuk.weather.data.model.ForecastWeather;
 import com.havrylyuk.weather.data.model.Hour;
 import com.havrylyuk.weather.data.remote.WeatherApiClient;
 import com.havrylyuk.weather.data.remote.OpenWeatherService;
+import com.havrylyuk.weather.events.LoadingStatusEvent;
 import com.havrylyuk.weather.util.LocaleHelper;
 import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -41,15 +44,17 @@ import retrofit2.Call;
 public class WeatherService extends IntentService {
 
     public static final int FORECAST_COUNT_DAYS = 3;
+
     public static final String EXTRA_KEY_SYNC =
             "com.havrylyuk.weather.intent.action.EXTRA_KEY_SYNC" ;
     public static final String ACTION_DATA_UPDATED =
             "com.havrylyuk.weather.app.ACTION_DATA_UPDATED";
 
     private static final String LOG_TAG = WeatherService.class.getSimpleName();
-    private static final int START_SYNC = 1;
-    private static final int END_SYNC = 2;
-    private static final int ERROR_SYNC = 0;
+    public static final int SYNC_ERROR = 0;
+    public static final int SYNC_START = 1;
+    public static final int SYNC_END = 2;
+    public static final int SYNC_NO_INTERNET = 3;
 
     private ILocalDataSource localDataSource;
     private final SimpleDateFormat fmt;
@@ -71,7 +76,7 @@ public class WeatherService extends IntentService {
             fileManager = FileManager.getInstance(getAssets());
             isMetric = getString(R.string.pref_unit_default_value)
                     .equals(pref.getUnits(this));
-            updateSyncStatus(START_SYNC);
+            updateSyncStatus(SYNC_START);
             if (Utility.isNetworkAvailable(getApplicationContext())) {
                 localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
                 final OpenWeatherService service = WeatherApiClient.getClient().create(OpenWeatherService.class);
@@ -84,10 +89,11 @@ public class WeatherService extends IntentService {
 
                 }
             } else    {
-                Log.d(LOG_TAG,getString(R.string.no_internet));
+                Log.d(LOG_TAG, getString(R.string.no_internet));
+                updateSyncStatus(SYNC_NO_INTERNET);
             }
             if (BuildConfig.DEBUG) Log.d(LOG_TAG, " End network data synchronization ");
-            updateSyncStatus(END_SYNC);
+            updateSyncStatus(SYNC_END);
         }
     }
 
@@ -109,7 +115,7 @@ public class WeatherService extends IntentService {
              }
             } catch (IOException e) {
                 e.printStackTrace();
-                updateSyncStatus(ERROR_SYNC);
+                updateSyncStatus(SYNC_ERROR);
             } catch (ParseException e) {
                  e.printStackTrace();
         }
@@ -174,11 +180,7 @@ public class WeatherService extends IntentService {
     }
 
     private void updateSyncStatus(int status) {
-        Intent intentUpdate = new Intent();
-        intentUpdate.setAction(ACTION_DATA_UPDATED);
-        intentUpdate.setPackage(getPackageName());
-        intentUpdate.putExtra(EXTRA_KEY_SYNC, status);
-        sendBroadcast(intentUpdate);
+        EventBus.getDefault().post(new LoadingStatusEvent(status));
     }
 
     //convert MilliBars to mmHg.

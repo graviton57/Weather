@@ -30,4 +30,5 @@
     <string name="title_widget_today">Прогноз на сегодня</string>
     <string name="pref_sync_title">Период обновления</string>
     <string name="format_wind">Ветер:<xliff:g id="speed">1%.0f</xliff:g> <xliff:g id="unit">%2$s</xliff:g>, <xliff:g id="dir">%3$s</xliff:g></string>
+    <string name="error_load_data">Упс ... Что-то пошло не так!</string>
 </resources>
