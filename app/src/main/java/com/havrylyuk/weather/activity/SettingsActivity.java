@@ -19,7 +19,7 @@ import android.view.MenuItem;
 
 
 import com.havrylyuk.weather.R;
-import com.havrylyuk.weather.events.WeatherEvent;
+import com.havrylyuk.weather.events.ChangeEvent;
 import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
 import com.havrylyuk.weather.util.LocaleHelper;
@@ -162,7 +162,7 @@ public class SettingsActivity extends BasePreferenceActivity implements SharedPr
         if (TextUtils.equals(getString(R.string.pref_selected_lang_key), key)) {
             String newLang = prefs.getString(getString(R.string.pref_selected_lang_key), "en");
             LocaleHelper.setLocale(this, newLang);
-            EventBus.getDefault().post(new WeatherEvent(WeatherEvent.CHANGE_LANGUAGE));
+            EventBus.getDefault().post(new ChangeEvent(ChangeEvent.CHANGE_LANGUAGE));
             recreate();
         }
 

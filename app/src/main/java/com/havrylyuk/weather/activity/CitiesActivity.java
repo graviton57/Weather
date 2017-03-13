@@ -28,7 +28,7 @@ import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.model.CityWithWeather;
 import com.havrylyuk.weather.dialog.AboutDialog;
 import com.havrylyuk.weather.events.LoadingStatusEvent;
-import com.havrylyuk.weather.events.WeatherEvent;
+import com.havrylyuk.weather.events.ChangeEvent;
 import com.havrylyuk.weather.fragment.CityDetailFragment;
 import com.havrylyuk.weather.service.WeatherJobService;
 import com.havrylyuk.weather.service.WeatherService;
@@ -262,13 +262,13 @@ public class CitiesActivity extends PermissionActivity {
     }
 
     @Subscribe
-    public void onEvent(WeatherEvent event) {
+    public void onEvent(ChangeEvent event) {
         switch (event.getEventId()) {
-            case WeatherEvent.CHANGE_CONTENT:
+            case ChangeEvent.CHANGE_CONTENT:
                 if (BuildConfig.DEBUG)  Log.d(LOG_TAG, "Content Change Event - reload weather data from network");
                 updateDataFromNetwork();
                 break;
-            case WeatherEvent.CHANGE_LANGUAGE:
+            case ChangeEvent.CHANGE_LANGUAGE:
                 recreate();
                 break;
         }

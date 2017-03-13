@@ -9,7 +9,7 @@ import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.dao.OrmCityDao;
 import com.havrylyuk.weather.dao.OrmWeather;
 import com.havrylyuk.weather.dao.OrmWeatherDao;
-import com.havrylyuk.weather.events.WeatherEvent;
+import com.havrylyuk.weather.events.ChangeEvent;
 import com.havrylyuk.weather.util.PreferencesHelper;
 import com.havrylyuk.weather.util.Utility;
 
@@ -139,7 +139,7 @@ public class LocalDataSource implements ILocalDataSource {
         OrmCityDao cityDao = daoSession.getOrmCityDao();
         cityDao.insertInTx(cities);
         if (cities!=null && !cities.isEmpty()){
-            EventBus.getDefault().post(new WeatherEvent(WeatherEvent.CHANGE_CONTENT));
+            EventBus.getDefault().post(new ChangeEvent(ChangeEvent.CHANGE_CONTENT));
         }
 
     }
@@ -148,7 +148,7 @@ public class LocalDataSource implements ILocalDataSource {
     public void saveCity(OrmCity city) {
         OrmCityDao cityDao = daoSession.getOrmCityDao();
         cityDao.insertOrReplace(city);
-        EventBus.getDefault().post(new WeatherEvent(WeatherEvent.CHANGE_CONTENT));
+        EventBus.getDefault().post(new ChangeEvent(ChangeEvent.CHANGE_CONTENT));
     }
 
     @Override
