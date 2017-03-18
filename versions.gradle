@@ -1,5 +1,5 @@
 ext {
-    supportVersion = '25.2.0'
+    supportVersion = '25.3.0'
     okhttpVersion = '3.4.1'
     retrofitVersion = '2.1.0'
     greenDaoVersion = '3.2.0'
