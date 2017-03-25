@@ -1,9 +1,8 @@
 package com.havrylyuk.weather.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,11 +20,13 @@ import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.WeatherApp;
 import com.havrylyuk.weather.dao.OrmCity;
 import com.havrylyuk.weather.data.local.ILocalDataSource;
+import com.havrylyuk.weather.events.LocationEvent;
+import com.havrylyuk.weather.service.LocationService;
 import com.havrylyuk.weather.util.PreferencesHelper;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by Igor Havrylyuk on 07.03.2017.
@@ -50,6 +51,7 @@ public  class PermissionActivity extends BaseActivity implements
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         localDataSource = ((WeatherApp) getApplicationContext()).getLocalDataSource();
         if (PreferencesHelper.getInstance().isUseCurrentLocation(this)) {
             if (savedInstanceState == null) {
@@ -69,6 +71,7 @@ public  class PermissionActivity extends BaseActivity implements
 
     @Override
     public void onStop() {
+        EventBus.getDefault().unregister(this);
         super.onStop();
         if (googleApiClient != null) {
             googleApiClient.disconnect();
@@ -115,7 +118,9 @@ public  class PermissionActivity extends BaseActivity implements
                 == PackageManager.PERMISSION_GRANTED) {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (lastLocation != null) {
-                updateCurrentLocation(lastLocation);
+                Intent intent = new Intent(this, LocationService.class);
+                intent.putExtra(LocationService.LOCATION_DATA_EXTRA, lastLocation);
+                startService(intent);
             }
         }
     }
@@ -130,28 +135,12 @@ public  class PermissionActivity extends BaseActivity implements
         if (BuildConfig.DEBUG) Log.d(LOG_TAG,"onConnectionSuspended i="+i);
     }
 
-    private void updateCurrentLocation(Location location) {
-        Geocoder geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            if (addresses != null && addresses.size() > 0) {
-                String country = addresses.get(0).getCountryName();
-                String region = addresses.get(0).getAdminArea();
-                String currentCity = addresses.get(0).getLocality();
-                String currentAddress = addresses.get(0).getAddressLine(0);
-                if (BuildConfig.DEBUG){
-                        Log.d(LOG_TAG, "updateCurrentLocation:You current country=" +
-                               country+ " region="+region +" cityName=" + currentCity+" Address=" + currentAddress);
-                        Log.d(LOG_TAG,"lat="+String.valueOf(location.getLatitude())+
-                               "long="+String.valueOf(lastLocation.getLongitude()));
-                }
-                OrmCity yourCity = new OrmCity((long)1, currentCity, region,
-                        country, location.getLatitude(), location.getLongitude());
-               localDataSource.saveCity(yourCity);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(LocationEvent event) {
+        Log.d(LOG_TAG, "LocationEvent location=" + event.getCity());
+        OrmCity yourCity = new OrmCity((long)1, event.getCity(), event.getRegion(),
+                event.getCountry(), lastLocation.getLatitude(), lastLocation.getLongitude());
+        localDataSource.saveCity(yourCity);
     }
+
 }

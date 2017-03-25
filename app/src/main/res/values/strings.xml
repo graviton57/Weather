@@ -59,6 +59,7 @@
     <string name="pref_sync_key" translatable="false">pref_sync_key</string>
     <string name="pref_selected_lang_key" translatable="false">pref_selected_lang_key</string>
     <string name="pref_lang_title">Language</string>
+    <string name="unknown_location">Unknown city</string>
 
 
 </resources>
