@@ -1,11 +1,11 @@
 ext {
-    supportVersion = '25.3.0'
+    supportVersion = '25.3.1'
     okhttpVersion = '3.4.1'
     retrofitVersion = '2.1.0'
     greenDaoVersion = '3.2.0'
     eventBusVersion = '3.0.0'
     frescoVersion = '1.1.0'
-    playServicesVersion = '10.2.0'
+    playServicesVersion = '10.2.1'
     jobDispatcherVersion= '0.5.2'
     junitVersion = '4.12'
     espressoVersion = '2.2.2'
