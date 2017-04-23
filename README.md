@@ -4,6 +4,11 @@
   <img src="screenshot/logo.png" >
 </p>
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Weather-brightgreen.svg?style=flat)](https://android-arsenal.com/details/3/5631)
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![API](https://img.shields.io/badge/API-16%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=16)
+
+
 Weather Android App using apixu API https://www.apixu.com
 
 Icon weather set made by apixu from https://www.apixu.com/api.aspx
