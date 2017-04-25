@@ -1,7 +1,0 @@
-ext {
-
-     BASE_WEATHER_URL = "http://api.apixu.com/v1/";
-     BASE_GEONAME_URL= "http://api.geonames.org/";
-     GEONAME_API_KEY= "graviton57";
-     WEATHER_API_KEY = "f1f65c036eac482fbac161623171302";
-}

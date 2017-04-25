@@ -43,6 +43,16 @@ Search City|Settings Activity | Widget
 * com.firebase:firebase-jobdispatcher:0.5.2
 * com.facebook.fresco:fresco:1.1.0
 
+#### Prerequisites
+
+Create an api.gradle file in Weather directory after generating API Key from Apixu and UserName from GeoNames. The contents would somewhat look like this :
+
+    ext {
+    BASE_WEATHER_URL = "http://api.apixu.com/v1/"; 
+    BASE_GEONAME_URL= "http://api.geonames.org/"; 
+    GEONAME_API_KEY= "YOUR_USER_NAME"; 
+    WEATHER_API_KEY = "YOUR_API_KEY"; }
+
 Developed By
 -------
 Igor Havrylyuk (Graviton57)

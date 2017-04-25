@@ -1,6 +1,5 @@
 package com.havrylyuk.weather.data.remote;
 
-import com.havrylyuk.weather.data.model.GeoApiResponse;
 import com.havrylyuk.weather.data.model.GeoCities;
 
 import retrofit2.Call;

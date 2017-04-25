@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.havrylyuk.weather.BuildConfig;
-import com.havrylyuk.weather.activity.CitiesActivity;
 import com.havrylyuk.weather.service.WeatherService;
 
 /**

@@ -6,7 +6,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.havrylyuk.weather.BuildConfig;
-import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.dao.OrmWeather;
 
 import java.io.IOException;
