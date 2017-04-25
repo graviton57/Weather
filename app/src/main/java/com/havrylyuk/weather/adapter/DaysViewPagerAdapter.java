@@ -3,6 +3,7 @@ package com.havrylyuk.weather.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
 import com.havrylyuk.weather.data.model.DayPager;
 import com.havrylyuk.weather.fragment.DayWeatherFragment;
 

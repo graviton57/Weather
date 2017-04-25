@@ -68,7 +68,7 @@
                 android:paddingLeft="8dp"
                 android:paddingStart="8dp"
                 android:textColor="@color/colorLight"
-                android:textSize="36dp"
+                android:textSize="36sp"
                 tools:ignore="RtlSymmetry"
                 tools:text="7°C" />
             <TextView

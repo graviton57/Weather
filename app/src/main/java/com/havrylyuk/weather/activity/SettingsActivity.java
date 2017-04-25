@@ -17,7 +17,6 @@ import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-
 import com.havrylyuk.weather.R;
 import com.havrylyuk.weather.events.ChangeEvent;
 import com.havrylyuk.weather.service.WeatherJobService;
