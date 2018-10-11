@@ -29,28 +29,28 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:support-v4:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:cardview-v7:$supportVersion"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:support-v4:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
 
-    compile "org.greenrobot:greendao:$greenDaoVersion"
-    compile "org.greenrobot:eventbus:$eventBusVersion"
+    implementation "org.greenrobot:greendao:$greenDaoVersion"
+    implementation "org.greenrobot:eventbus:$eventBusVersion"
 
-    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
-    compile "com.google.android.gms:play-services-location:$playServicesVersion"
-    compile "com.firebase:firebase-jobdispatcher:$jobDispatcherVersion"
+    implementation "com.google.android.gms:play-services-location:$playServicesVersion"
+    implementation "com.firebase:firebase-jobdispatcher:$jobDispatcherVersion"
 
-    compile "com.facebook.fresco:fresco:$frescoVersion"
+    implementation "com.facebook.fresco:fresco:$frescoVersion"
 
-    testCompile "junit:junit:$junitVersion"
+    testImplementation "junit:junit:$junitVersion"
 }
