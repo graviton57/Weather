@@ -34,7 +34,12 @@ public class Day {
 	
 	@SerializedName("totalprecip_in")
 	private double totalprecip_in;
-	private Condition mCondition = new Condition();
+
+	@SerializedName("avghumidity")
+    private int humidity;
+
+    @SerializedName("condition")
+    private Condition mCondition;
 
     public Day() {
     }
@@ -128,7 +133,15 @@ public class Day {
     {
     	this.totalprecip_in = mTotalprecip_in;
     }
-    
+
+    public int getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(final int humidity) {
+        this.humidity = humidity;
+    }
+
     public Condition getCondition()
     {
     	return mCondition;
