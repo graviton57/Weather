@@ -149,7 +149,7 @@ public class WeatherService extends IntentService {
     }
 
     private void getHourlyOrmWeather(long cityId, ForecastWeather response, List<OrmWeather> ormWeatherList) throws ParseException {
-        for (ForecastDay forecastDay : response.getForecast().getForecastday().subList(1,response.getForecast().getForecastday().size()-1)) {
+        for (ForecastDay forecastDay : response.getForecast().getForecastday()) {
 //            for (Hour hour : forecastDay.getHours()) {
 //                if (fmt.parse(hour.getTime()).after(Calendar.getInstance().getTime())) {//no save old forecast
                     OrmWeather weather = new OrmWeather();
@@ -173,7 +173,7 @@ public class WeatherService extends IntentService {
                     }
                     weather.setCondition_text(localizedCondition);
                     weather.setCondition_code(forecastDay.getDay().getCondition().getCode());
-//                    weather.setIs_day(hour.getIs_day()==1);
+                    weather.setIs_day(false);
                     ormWeatherList.add(weather);
 //                }
 //            }
