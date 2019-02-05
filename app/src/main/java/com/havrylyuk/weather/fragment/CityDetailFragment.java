@@ -86,7 +86,9 @@ public class CityDetailFragment extends Fragment {
             setTemp(current.getTemp());
             setHumidity(current.getHumidity());
             setWindSpeed(current.getWind_speed(), current.getWind_dir());
-            setPressure(current.getPressure());
+            if (current.getPressure()!=null && current.getPressure() > 0){
+                setPressure(current.getPressure());
+            }
             setCondition(current.getCondition_text());
             setDate(current.getDt());
             setImage(Utility.getImageWithForecast(current.getCondition_code(),current.getIs_day()));
